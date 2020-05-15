@@ -131,7 +131,7 @@ sudo yum install libSM libICE libXpm libX11
 # 安裝成功畫面  
 - 確認都有找到相依的 library  
 ![](https://i.imgur.com/RHVLolU.png)  
-- 執行 sac
+- 執行 sac  
 ![](https://i.imgur.com/oYPMgXC.png)
 
 # 後記  
