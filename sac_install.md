@@ -1,5 +1,5 @@
 # SAC 安裝說明  
-本文連結 : https://hackmd.io/@kmo/sac_install_tutorial
+本文連結 : https://hackmd.io/@kmo/sac_install
 
 >  Seismic Analysis Code (SAC)  
 >  在 Linux 環境下，安裝`sac-101.6a-linux_x86_64.tar.gz`。  
