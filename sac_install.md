@@ -90,11 +90,11 @@ or 登出 (Ctrl + D) 再登入系統。
 ## 6. 查閱及安裝相依 Library 
 - 以 CentOS 舉例說明  
 在 CentOS 7 最小安裝環境下，
-壓縮檔`sac-101.6a-linux_x86_64.tar.gz` 內提供的 sac，為預先編譯好的 dynamic binary 版本。如下截圖，可以看到缺少 library `libSM.so.6`、`libICE.so.6`、`libXpm.so.4`、`libX11.so.6`。   
+壓縮檔`sac-101.6a-linux_x86_64.tar.gz` 內提供的 sac，為預先編譯好的 dynamic binary 版本。如下截圖，可以看到缺少 library `libSM.so.6`、`libICE.so.6`、`libXpm.so.4`、`libX11.so.6`。  
 
-![](https://i.imgur.com/FTLGY8t.png)
-查閱哪些套件提供`libSM.so.6`。
-![](https://i.imgur.com/v1Yc8oH.png)
+![](https://i.imgur.com/FTLGY8t.png)  
+查閱哪些套件提供`libSM.so.6`。  
+![](https://i.imgur.com/v1Yc8oH.png)  
 ```bash=1
 ldd $(which sac)
 ```  
@@ -102,7 +102,7 @@ ldd $(which sac)
 - Linux 指令說明:  
 `ldd` 列出相依的 library。  
 `which` 查閱該 Linux 指令路徑。  
-`$()` 為 Bash Command substitution 功能，輸出`$()`內執行結果。
+`$()` 為 Bash Command substitution 功能，輸出`$()`內執行結果。  
 
 ```bash=2
 yum whatprovides libSM.so.6
@@ -112,12 +112,12 @@ yum whatprovides libSM.so.6
 ```bash=3
 sudo yum install libSM libICE libXpm libX11
 ```
-安裝相依的 libaray。
+安裝相依的 libaray。  
 - Linux 指令說明:  
-`yum` 是`CentOS`套件管理指令。
+`yum` 是`CentOS`套件管理指令。  
 
 
-- 幫大家查好了相依的 library 對應的套件名稱
+- 幫大家查好了相依的 library 對應的套件名稱  
 
 | library     | RHEL/CentOS | Debian/Ubuntu |
 | ----------- | ----------- | ------------- |
@@ -128,13 +128,13 @@ sudo yum install libSM libICE libXpm libX11
 
 
 
-# 安裝成功畫面
+# 安裝成功畫面  
 - 確認都有找到相依的 library  
 ![](https://i.imgur.com/RHVLolU.png)  
 - 執行 sac
 ![](https://i.imgur.com/oYPMgXC.png)
 
-# 後記
+# 後記  
 畢業已久，脫離地科領域好一陣子。  
 臉書看到學生，輾轉詢問如何安裝 `sac`。  
 因此撰寫此文，額外補充一些 Linux 系統的說明，  
