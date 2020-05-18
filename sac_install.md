@@ -63,10 +63,10 @@ sed -i 's#PATH=${PATH}:${SACHOME}/bin#PATH=${SACHOME}/bin:${PATH}#' ~/sac-101.6a
 `sac` 有提供初始化腳本。需依據安裝路徑，修改初始化腳本。  
 
 - Linux 指令說明:  
-`sed -i` : 修改初始化腳本 `sacinit.sh` 內容。  
-修改變數`SACHOME`從 `SACHOME=/usr/local/sac` -> `SACHOME=~/sac-101.6a/sac`。  
-修改變數`PATH`從`PATH=${PATH}:${SACHOME}/bin` ->`PATH=${SACHOME}/bin:${PATH}`。  
-修改`PATH`變數的順序，目的是讓系統先讀到我們裝的`sac`，避免系統因存在相同名稱的程式，而執行到其他指令。  
+`sed -i` 修改初始化腳本 `sacinit.sh` 內容。  
+修改變數 `SACHOME` 從 `SACHOME=/usr/local/sac` -> `SACHOME=~/sac-101.6a/sac`。  
+修改變數 `PATH` 從`PATH=${PATH}:${SACHOME}/bin` ->`PATH=${SACHOME}/bin:${PATH}`。  
+修改 `PATH` 變數的順序，目的是讓系統先讀到我們裝的 `sac`，避免系統因存在相同名稱的程式，而執行到其他指令。  
 
 ## 4. 設定環境變數檔
 ```bash
@@ -98,11 +98,11 @@ sudo yum install libSM libICE libXpm libX11
 ## for Debian/Ubuntu
 sudo apt install libsm6 libice6 libxpm4 libx11-6 
 ```
-壓縮檔`sac-101.6a-linux_x86_64.tar.gz` 內提供的 `sac`，為預先編譯的執行檔。Linux 系統需具備相依的 library，才能正常使用。  
+壓縮檔 `sac-101.6a-linux_x86_64.tar.gz` 內提供的 `sac`，為預先編譯的執行檔。Linux 系統需具備相依的 library，才能正常使用。  
 - Linux 指令說明:  
 目前知名 Linux distribution，主要為 `RHEL/CentOS` or `Debian/Ubuntu` 兩種派系。兩者主要差別之一，是套件管理工具不同，一個是 `yum` 一個是 `apt` 。若用戶沒有管理員權限，沒法用 `sudo` 安裝套件，請向主機管理員請求協助。
 - ps:  
-若管理員沒法幫忙安裝，可以自行下載 library 套件( `*.rpm` or `*.deb`)，解壓縮至指定目錄，並新增環境變數 `LD_LIBRARY_PATH` 指向解壓縮的路徑，就能讓 sac 正常運行。
+若管理員沒法幫忙安裝，可以自行下載 library 套件(`*.rpm` or `*.deb`)，解壓縮至指定目錄，並新增環境變數 `LD_LIBRARY_PATH` 指向解壓縮的路徑，就能讓 sac 正常運行。
 
 
 ## 7. 查詢相依的 Library (參考內容，可跳過)
@@ -124,7 +124,7 @@ yum whatprovides libSM.so.6
 ## for Debian/Ubuntu
 apt-file search libSM.so.6
 ```  
-查詢哪些套件提供 `libSM.so.6`。可把 `libSM.so.6` 替換其他也是 `not found` 的 library。(在`Debian/Ubuntu` 環境，`apt-file` 並非預先安裝指令，可能需自行安裝。)
+查詢哪些套件提供 `libSM.so.6`。可把 `libSM.so.6` 替換其他也是 `not found` 的 library。(在 `Debian/Ubuntu` 環境，`apt-file` 並非預先安裝指令，可能需自行安裝。)
 
 ### 7.1 Library 對應的套件名稱 
 幫大家查好了相依的 library 的套件名稱   
@@ -140,10 +140,7 @@ apt-file search libSM.so.6
 安裝完套件後，確認 `sac` 都有找到所需的 library。  
 ![](https://i.imgur.com/RHVLolU.png)  
 
-
-
 # 安裝成功畫面  
-
 執行 `sac`，進入 `sac` 環境。  
 ![](https://i.imgur.com/oYPMgXC.png)
 
@@ -151,14 +148,13 @@ apt-file search libSM.so.6
 - sac README 文件 (`$SACHOME/README`)
 - sac 網頁提供的[安裝說明](https://seiscode.iris.washington.edu/projects/sac/wiki/Binary_Installation)
 
-
 # 後記  
 畢業已久，脫離地科領域好一陣子。  
 臉書看到學生，輾轉詢問如何安裝 `sac`。  
 (7年前我也卡在安裝 sac 過 XD)。  
 因此撰寫此文，補充一些 Linux 系統的說明，  
 希望能幫助初學者，減少熟悉 Linux 系統所花的成本。  
-安裝完`sac`，趕緊進到地震學的重頭戲，利用 `sac` 進行震波分析。  
+安裝完 `sac`，趕緊進到地震學的重頭戲，利用 `sac` 進行震波分析。  
 
 ---
 >   This tutorial is licensed under a [CC BY-SA 4.0][cc-by-sa].
