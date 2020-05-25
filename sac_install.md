@@ -7,7 +7,7 @@ tags: opentutorial, sac, seismic, geophysics
 >  Seismic Analysis Code (SAC)  
 >  安裝環境 :  Linux 作業系統  
 >  安裝檔案 : `sac-101.6a-linux_x86_64.tar.gz`  
->  本文連結 : https://hackmd.io/@kmo/open_sac_install
+>  本文連結 : https://hackmd.io/@kmo/opt_sac_install
 
 [TOC]
 
