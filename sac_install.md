@@ -1,5 +1,5 @@
 ---
-tags: opentutorial, sac, seismic, geophysics 
+tags: notes, sac, seismic, geophysics 
 ---
 
 
@@ -7,7 +7,7 @@ tags: opentutorial, sac, seismic, geophysics
 >  Seismic Analysis Code (SAC)  
 >  安裝環境 :  Linux 作業系統  
 >  安裝檔案 : `sac-101.6a-linux_x86_64.tar.gz`  
->  本文連結 : https://hackmd.io/@kmo/opt_sac_install
+>  本文連結 : https://hackmd.io/@kmo/notes_sac_install
 
 [TOC]
 
@@ -157,9 +157,8 @@ apt-file search libSM.so.6
 安裝完 `sac`，趕緊進到地震學的重頭戲，利用 `sac` 進行震波分析。  
 
 ---
->   This tutorial is licensed under a [CC BY-SA 4.0][cc-by-sa].
-
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa]  
+[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa]
+>   This work is licensed under a [CC BY-SA 4.0][cc-by-sa].   
 
 [cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/ 
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png  
