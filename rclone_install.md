@@ -5,12 +5,16 @@ tags: notes, rclone
 # rclone installation guide
 - goal :   
 install rclone to your home directory 
-- ref:  
+- share link :  
+https://hackmd.io/@kmo/notes_rclone_install  
+- question/suggestion :  
+If any question or suggestion,  
+welcome to open github issue.  
+https://github.com/likueimo/notes/issues
+- ref :  
 https://rclone.org/downloads  
 https://rclone.org/install.sh  
-https://rclone.org/install
-- share link:  
-https://hackmd.io/@kmo/notes_rclone_install  
+https://rclone.org/install  
 
 ## envirmont
 - os : linux x86_64
@@ -76,7 +80,8 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
 
 ## alternative way
-install rclone from deb/rpm
+install rclone from deb/rpm  
+
 ### Ubuntu/Debian
 ```bash=
 # download rclone deb
