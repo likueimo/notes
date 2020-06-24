@@ -80,7 +80,7 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
 
 ## alternative way
-- install from deb/rpm  
+- install rclone by deb/rpm  
 
 ### Ubuntu/Debian
 ```bash=
