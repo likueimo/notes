@@ -9,7 +9,7 @@ install rclone to your home directory
 https://hackmd.io/@kmo/notes_rclone_install  
 - question/suggestion :  
 If any question or suggestion,  
-welcome to open github issue.  
+welcome to comment on hackmd or open github issue.  
 https://github.com/likueimo/notes/issues
 - ref :  
 https://rclone.org/downloads  
