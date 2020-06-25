@@ -20,7 +20,7 @@ https://rclone.org/install
 - shell : bash
 
 ## Superuser
-- superuser privilege
+- superuser privilege (you can use sudo command)
 - install rclone by deb/rpm
 
 ### Ubuntu/Debian  
@@ -37,7 +37,7 @@ rm rclone-current-linux-amd64.deb
 ```
 - uninstall 
 ```bash=
-# uninstall
+# uninstall rclone
 sudo apt remove rclone
 ```
 
@@ -50,12 +50,12 @@ sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 ```
 - uninstall
 ```bash=
-# uninstall
+# uninstall rclone
 sudo yum remove rclone
 ```
 
 ## Normal user 
-- no superuser privilege
+- no superuser privilege (you can not use sudo command)
 - install rclone to your home directory
 
 
