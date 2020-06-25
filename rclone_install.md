@@ -3,8 +3,7 @@ tags: notes, rclone
 ---
 
 # rclone installation guide
-- goal :   
-install rclone to your home directory 
+
 - share link :  
 https://hackmd.io/@kmo/notes_rclone_install  
 - question/suggestion :  
@@ -16,20 +15,57 @@ https://rclone.org/downloads
 https://rclone.org/install.sh  
 https://rclone.org/install  
 
-## envirmont
+# envirmont
 - os : linux x86_64
 - shell : bash
 
-## required command
-- unzip
+## Superuser
+- superuser privilege
+- install rclone by deb/rpm
+
+### Ubuntu/Debian  
+- install 
 ```bash=
-# Ubuntu/Debian
-sudo apt install unzip
-# RHEL/CentOS
-sudo yum install unzip
+# download rclone deb
+curl -O https://downloads.rclone.org/rclone-current-linux-amd64.deb
+
+# install deb
+sudo apt install ./rclone-current-linux-amd64.deb
+
+# clean deb
+rm rclone-current-linux-amd64.deb
+```
+- uninstall 
+```bash=
+# uninstall
+sudo apt remove rclone
 ```
 
-## installation
+### RHEL/CentOS
+- intall
+
+```bash=
+# install rpm
+sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
+```
+- uninstall
+```bash=
+# uninstall
+sudo yum remove rclone
+```
+
+## Normal user 
+- no superuser privilege
+- install rclone to your home directory
+
+
+### required command
+- unzip 
+> If there is no unzip command,  
+> you can ask system admin to install unzip.
+
+
+### install
 
 ```bash=
 # tmp for rclone download
@@ -64,7 +100,7 @@ cd ~/
 rm -rf ~/tmp_rclone
 ```
 
-## uninstallation
+### uninstall
 
 ```bash=
 # remove rclone
@@ -77,34 +113,6 @@ find ~/man -type d -empty -delete
 
 # remove rclone_path in profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
-```
-
-## alternative way
-- install rclone by deb/rpm  
-
-### Ubuntu/Debian
-```bash=
-# download rclone deb
-curl -O https://downloads.rclone.org/rclone-current-linux-amd64.deb
-
-# install deb
-sudo apt install ./rclone-current-linux-amd64.deb
-
-# uninstall
-sudo apt remove rclone
-
-# clean deb
-rm rclone-current-linux-amd64.deb
-```
-
-### RHEL/CentOS
-
-```bash=
-# install rpm
-sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
-
-# uninstall
-sudo yum remove rclone
 ```
 
 ---
