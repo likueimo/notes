@@ -104,8 +104,8 @@ rm -rf ~/tmp_rclone
 
 ```bash=
 # remove rclone
-rm -rf ~/bin/rclone
-rm -rf ~/man/man1/rclone.1
+rm ~/bin/rclone
+rm ~/man/man1/rclone.1
 
 # remove directory if empty
 find ~/bin -type d -empty -delete
