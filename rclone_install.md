@@ -14,7 +14,8 @@ welcome to comment on hackmd or open [github issue](https://github.com/likueimo/
 - 中文說明 :  
 rclone 安裝教學，適用大部分 Linux 系統  
 有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
-無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分
+無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分  
+這篇英文夠簡單就不寫中文版惹 XD
 
 ## Superuser
 - superuser privilege (you can use sudo command)
