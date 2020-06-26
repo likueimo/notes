@@ -66,9 +66,8 @@ sudo yum remove rclone
 ### install
 
 ```bash=
-# tmp for rclone download
-mkdir -p ~/tmp_rclone
-cd ~/tmp_rclone
+# change directory to /tmp
+cd /tmp
 
 # download
 curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
@@ -76,38 +75,41 @@ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
 # unzip
 unzip rclone-current-linux-amd64.zip
 
-# install rclone binary in /home/$USER/bin
-mkdir -p ~/bin
-mv $(find . -name 'rclone') ~/bin
+# install rclone binary in /home/$USER/rclone/bin
+mkdir -p ~/rclone/bin
+mv rclone-*-linux-amd64/rclone ~/rclone/bin
 
-# install rclone manual in /home/$USER/man (option)
-mkdir -p ~/man/man1
-mv $(find . -name 'rclone.1') ~/man/man1
+# install rclone manual in /home/$USER/rclone/man
+mkdir -p ~/rclone/man/man1
+mv rclone-*-linux-amd64/rclone.1 ~/rclone/man/man1
 
 # add rclone path environment
 cat << EOF >> ~/.bash_profile
-PATH=~/bin:\$PATH #_rclone_path_#
+PATH=~/rclone/bin:\$PATH #_rclone_path_#
 EOF
 
-# init profile 
-source ~/.bash_profile
-# or logout and login
+# clean rclone zipfile and unzip directory
+rm rclone-current-linux-amd64.zip
+rm -r rclone-*-linux-amd64
+```
+- logout (Ctrl+D) and login for initializing ~/.bash_profile
 
-# clean tmp_rclone
-cd ~/
-rm -rf ~/tmp_rclone
+### check install success
+
+```bash=
+rclone help
+man rclone
 ```
 
 ### uninstall
 
 ```bash=
 # remove rclone
-rm ~/bin/rclone
-rm ~/man/man1/rclone.1
+rm ~/rclone/bin/rclone
+rm ~/rclone/man/man1/rclone.1
 
 # remove directory if empty
-find ~/bin -type d -empty -delete
-find ~/man -type d -empty -delete
+find ~/rclone -type d -empty -delete
 
 # remove rclone_path in profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
