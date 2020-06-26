@@ -3,21 +3,18 @@ tags: notes, rclone
 ---
 
 # rclone installation guide
-
+- environment :  linux/x86_64/bash  
+- **can use sudo**  -> [go to Superuser](#Superuser)
+- **can't use sudo** -> [go to Normal user](#Normal-user)
 - share link :  
 https://hackmd.io/@kmo/notes_rclone_install  
 - question/suggestion :  
 If any question or suggestion,  
-welcome to comment on hackmd or open github issue.  
-https://github.com/likueimo/notes/issues
-- ref :  
-https://rclone.org/downloads  
-https://rclone.org/install.sh  
-https://rclone.org/install  
-
-# envirmont
-- os : linux x86_64
-- shell : bash
+welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).  
+- 中文說明 :  
+rclone 安裝教學，適用大部分 Linux 系統  
+有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
+無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分
 
 ## Superuser
 - superuser privilege (you can use sudo command)
@@ -114,6 +111,11 @@ find ~/man -type d -empty -delete
 # remove rclone_path in profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
+
+# reference
+- https://rclone.org/downloads  
+- https://rclone.org/install.sh  
+- https://rclone.org/install  
 
 ---
 [![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]  
