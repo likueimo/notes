@@ -94,7 +94,7 @@ rm -r rclone-*-linux-amd64
 ```
 - logout (Ctrl+D) and login for initializing ~/.bash_profile
 
-### check install success
+### check installation successful
 
 ```bash=
 rclone help
