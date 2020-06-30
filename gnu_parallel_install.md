@@ -62,7 +62,7 @@ https://www.gnu.org/software/parallel
 - install gnu parallel through conda 
 
 ### conda
-install gnu parallel through conda-forge channel.
+- install gnu parallel through conda-forge channel.
 - prepare and install conda first  
 https://docs.conda.io/projects/conda/en/latest/user-guide/install
 - install
