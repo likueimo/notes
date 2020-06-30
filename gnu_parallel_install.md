@@ -13,14 +13,14 @@ https://hackmd.io/@kmo/notes_gnu_parallel_install
 - question/suggestion :  
 If any question or suggestion,  
 welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).  
-- 中文說明 : 
+- 中文說明 :   
 gnu parallel 安裝教學，可適用大部分 Linux 系統  
 有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
 無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分  
-大部分 Linux 都有現成 gnu parallel 可安裝，可用套件管理指令安裝(如apt/yum)。
-缺點是提供的可能都 out-of-date 沒更新了。
-這邊列舉 rpm 是作者維護的版本，隨時會保持最新。
-除此之外，還可透過 [conda-forge](https://anaconda.org/conda-forge/parallel) 安裝 gnu parallel，
+大部分 Linux 都有現成 gnu parallel 可安裝，可用套件管理指令安裝(如apt/yum)。  
+缺點是提供的可能都 out-of-date 沒更新了。  
+這邊列舉 rpm 是作者維護的版本，隨時會保持最新。  
+除此之外，還可透過 [conda-forge](https://anaconda.org/conda-forge/parallel) 安裝 gnu parallel，  
 不但支援 Linux，甚至可在 Mac OS、Windows 上使用。
 
 ## Superuser
@@ -65,9 +65,9 @@ https://www.gnu.org/software/parallel
 
 ### conda
 install gnu parallel through conda-forge channel.
-- prepare and install conda first 
+- prepare and install conda first  
 https://docs.conda.io/projects/conda/en/latest/user-guide/install  
-- install gnu parallel
+- install gnu parallel  
 ```bash=
 conda create --name gnu_parallel --channel conda-forge parallel
 ```
