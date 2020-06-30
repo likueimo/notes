@@ -61,7 +61,7 @@ sudo yum remove rclone
 - install rclone through manual
  
 ### conda
-install rclone through conda-forge channel.
+- install rclone through conda-forge channel.
 - prepare and install conda first  
 https://docs.conda.io/projects/conda/en/latest/user-guide/install
 - install
