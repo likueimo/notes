@@ -1,5 +1,5 @@
 ---
-tags: notes, rclone
+tags: notes, installation, rclone
 ---
 
 # rclone installation guide
@@ -40,7 +40,7 @@ sudo apt remove rclone
 ```
 
 ### RHEL/CentOS
-- intall
+- install
 
 ```bash=
 # install rpm
