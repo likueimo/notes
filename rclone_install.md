@@ -3,14 +3,14 @@ tags: notes, installation, rclone
 ---
 
 # rclone installation guide
-- environment :  linux/x86_64/bash  
+- environment :  linux/x86_64/bash
 - **can use sudo**  -> [go to Superuser](#Superuser)
 - **can't use sudo** -> [go to Normal user](#Normal-user)
 - share link :  
-https://hackmd.io/@kmo/notes_rclone_install  
+https://hackmd.io/@kmo/notes_rclone_install
 - question/suggestion :  
 If any question or suggestion,  
-welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).  
+welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).
 - 中文說明 :  
 rclone 安裝教學，適用大部分 Linux 系統  
 有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
@@ -19,9 +19,9 @@ rclone 安裝教學，適用大部分 Linux 系統
 
 ## Superuser
 - superuser privilege (you can use sudo command)
-- install rclone by deb/rpm
+- install rclone through deb/rpm
 
-### Ubuntu/Debian  
+### Ubuntu/Debian
 - install 
 ```bash=
 # download rclone deb
@@ -52,18 +52,38 @@ sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 sudo yum remove rclone
 ```
 
+### Other Linux distribution
+- through [Normal user steps](#Normal-user)
+
 ## Normal user 
 - no superuser privilege (you can not use sudo command)
-- install rclone to your home directory
+- install rclone through conda
+- install rclone through manual
+ 
+### conda
+install rclone through conda-forge channel.
+- prepare and install conda first  
+https://docs.conda.io/projects/conda/en/latest/user-guide/install
+- install
+```bash=
+conda create --name conda_rclone --channel conda-forge rclone
+```
+- use 
+```bash=
+conda activate conda_rclone
+```
+- uninstall
+```bash=
+conda remove --name conda_rclone --all
+```
 
 
-### required command
-- unzip 
-> If there is no unzip command,  
+### manual
+-  required command : 
+unzip 
+> If there is no unzip command,
 > you can ask system admin to install unzip.
-
-
-### install
+- install
 
 ```bash=
 # change directory to /tmp
@@ -93,15 +113,12 @@ rm rclone-current-linux-amd64.zip
 rm -r rclone-*-linux-amd64
 ```
 - logout (Ctrl+D) and login for initializing ~/.bash_profile
-
-### check installation successful
-
+- check installation successful
 ```bash=
 rclone help
 man rclone
 ```
-
-### uninstall
+- uninstall
 
 ```bash=
 # remove rclone
@@ -116,12 +133,12 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
 
 # reference
-- https://rclone.org/downloads  
-- https://rclone.org/install.sh  
-- https://rclone.org/install  
+- https://rclone.org/downloads
+- https://rclone.org/install.sh
+- https://rclone.org/install
 
 ---
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]  
+[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]
 
 [cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/ 
-[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png  
+[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
