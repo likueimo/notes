@@ -4,8 +4,6 @@ tags: notes, installation, rclone
 
 # rclone installation guide
 - environment :  linux/x86_64/bash
-- **can use sudo**  -> [go to Superuser](#Superuser)
-- **can't use sudo** -> [go to Normal user](#Normal-user)
 - share link :  
 https://hackmd.io/@kmo/notes_rclone_install
 - question/suggestion :  
@@ -13,15 +11,16 @@ If any question or suggestion,
 welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).
 - 中文說明 :  
 rclone 安裝教學，適用大部分 Linux 系統  
-有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
-無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分  
-這篇英文夠簡單就不寫中文版惹 XD
+由於 rclone 是 go 語言撰寫，編譯好後基本上沒有相依性問題  
+可以參考[手動安裝](##Manual-Installation)
 
-## Superuser
-- superuser privilege (you can use sudo command)
-- install rclone through deb/rpm
 
-### Ubuntu/Debian
+## Package manager
+
+- install rclone through package manager
+
+### apt (Ubuntu/Debian)
+
 - install 
 ```bash=
 # download rclone deb
@@ -30,18 +29,18 @@ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.deb
 # install deb
 sudo apt install ./rclone-current-linux-amd64.deb
 
-# clean deb
+# clean
 rm rclone-current-linux-amd64.deb
 ```
+
 - uninstall 
 ```bash=
 # uninstall rclone
 sudo apt remove rclone
 ```
 
-### RHEL/CentOS
+### yum (RHEL/CentOS)
 - install
-
 ```bash=
 # install rpm
 sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
@@ -52,37 +51,27 @@ sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 sudo yum remove rclone
 ```
 
-### Other Linux distribution
-- through [Normal user steps](#Normal-user)
-
-## Normal user 
-- no superuser privilege (you can not use sudo command)
-- install rclone through conda
-- install rclone through manual
- 
-### conda
-- install rclone through conda-forge channel.
-- prepare and install conda first  
-https://docs.conda.io/projects/conda/en/latest/user-guide/install
+### conda (Linux/Windows/macOS)
+- install rclone through conda-forge channel [(rclone conda-forge page)](https://anaconda.org/conda-forge/rclone)
+- [install conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) 
 - install
 ```bash=
-conda create --name conda_rclone --channel conda-forge rclone
+conda create --name rclone_env --channel conda-forge rclone
 ```
 - use 
 ```bash=
-conda activate conda_rclone
+conda activate rclone_env
 ```
 - uninstall
 ```bash=
-conda remove --name conda_rclone --all
+conda remove --name rclone_env --all
 ```
 
 
-### manual
+## Manual Installation
+- environment :  linux/x86_64/bash
 -  required command : 
-unzip 
-> If there is no unzip command,
-> you can ask system admin to install unzip.
+unzip  
 - install
 
 ```bash=
@@ -103,12 +92,12 @@ mv rclone-*-linux-amd64/rclone ~/rclone/bin
 mkdir -p ~/rclone/man/man1
 mv rclone-*-linux-amd64/rclone.1 ~/rclone/man/man1
 
-# add rclone path environment
+# add rclone path to environment variable
 cat << EOF >> ~/.bash_profile
 PATH=~/rclone/bin:\$PATH #_rclone_path_#
 EOF
 
-# clean rclone zipfile and unzip directory
+# clean
 rm rclone-current-linux-amd64.zip
 rm -r rclone-*-linux-amd64
 ```
@@ -136,6 +125,8 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
 - https://rclone.org/downloads
 - https://rclone.org/install.sh
 - https://rclone.org/install
+- https://anaconda.org/conda-forge/rclone
+- https://github.com/conda-forge/rclone-feedstock
 
 ---
 [![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]
