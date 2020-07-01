@@ -15,11 +15,11 @@ rclone 安裝教學，適用大部分 Linux 系統
 可以參考[手動安裝](##Manual-Installation)
 
 
-## Package manager
+# Package manager
 
 - install rclone through package manager
 
-### apt (Ubuntu/Debian)
+## apt (Ubuntu/Debian)
 
 - install 
 ```bash=
@@ -39,7 +39,7 @@ rm rclone-current-linux-amd64.deb
 sudo apt remove rclone
 ```
 
-### yum (RHEL/CentOS)
+## yum (RHEL/CentOS)
 - install
 ```bash=
 # install rpm
@@ -51,7 +51,7 @@ sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 sudo yum remove rclone
 ```
 
-### conda (Linux/Windows/macOS)
+## conda (Linux/Windows/macOS)
 - install rclone through [conda-forge channel](https://anaconda.org/conda-forge/rclone)
 - install
 ```bash=
@@ -67,7 +67,7 @@ conda remove --name rclone_env --all
 ```
 
 
-## Manual Installation
+# Manual Installation
 - environment :  linux/x86_64/bash
 -  required command : 
 unzip  
@@ -119,6 +119,12 @@ find ~/rclone -type d -empty -delete
 # remove rclone_path in profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
+
+# Support matrix
+- latest pre-compiled rclone [support matrix](https://rclone.org/downloads)
+
+![](https://i.imgur.com/aUXqtJ0.png)
+
 
 # reference
 - https://rclone.org/downloads
