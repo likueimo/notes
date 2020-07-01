@@ -52,8 +52,7 @@ sudo yum remove rclone
 ```
 
 ### conda (Linux/Windows/macOS)
-- install rclone through conda-forge channel [(rclone conda-forge page)](https://anaconda.org/conda-forge/rclone)
-- [install conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) 
+- install rclone through [conda-forge channel](https://anaconda.org/conda-forge/rclone)
 - install
 ```bash=
 conda create --name rclone_env --channel conda-forge rclone
