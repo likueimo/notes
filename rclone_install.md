@@ -4,7 +4,7 @@ tags: notes, installation, rclone
 
 # Rclone installation note
 - env :  linux/x86_64/bash
-- link : https://hackmd.io/@kmo/notes_rclone_install
+- link : [kmo/notes_rclone_install](https://hackmd.io/@kmo/notes_rclone_install)
 - 說明 :  
 rclone 安裝筆記，適用大部分 Linux 系統  
 rclone 是 go 語言撰寫，編譯好後應無相依性問題  
