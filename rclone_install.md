@@ -1,5 +1,5 @@
 ---
-tags: notes, installation, rclone
+tags: notes, install, rclone
 ---
 
 # Rclone installation note
