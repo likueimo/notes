@@ -87,7 +87,7 @@ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
 # unzip
 unzip rclone-current-linux-amd64.zip
 
-# install rclone binary in /home/$USER/rclone/bin
+# install rclone in /home/$USER/rclone/bin
 mkdir -p ~/rclone/bin
 mv rclone-*-linux-amd64/rclone ~/rclone/bin
 
