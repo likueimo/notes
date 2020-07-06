@@ -75,7 +75,7 @@ conda remove --name rclone_env --all
 # Manual Installation
 -  required command : 
 unzip
-- install
+- install to ~/rclone
 
 ```bash=
 # change directory to /tmp
@@ -114,11 +114,7 @@ man rclone
 
 ```bash=
 # remove rclone
-rm ~/rclone/bin/rclone
-rm ~/rclone/man/man1/rclone.1
-
-# remove directory if empty
-find ~/rclone -type d -empty -delete
+rm -r ~/rclone
 
 # remove rclone_path in profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
