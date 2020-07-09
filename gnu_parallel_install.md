@@ -1,37 +1,41 @@
 ---
-tags: notes, installation, parallel
+tags: notes, install, parallel
 ---
 
-# gnu parallel installation guide
-Thanks Ole Tange for developing gnu parallel and keeping updating rpm by [website](https://build.opensuse.org/package/show/home:tange/parallel).
-- environment :  linux/x86_64/bash
-- **can use sudo**  -> [go to Superuser](#Superuser)
-- **can't use sudo** -> [go to Normal user](#Normal-user)
-- share link :  
-https://hackmd.io/@kmo/notes_gnu_parallel_install
-- question/suggestion :  
-If any question or suggestion,  
-welcome to comment on hackmd or open [github issue](https://github.com/likueimo/notes/issues).
-- 中文說明 :  
-gnu parallel 安裝教學，可適用大部分 Linux 系統  
-有 sudo 權限用戶，可參考 [Superuser](#Superuser) 部分  
-無 sudo 權限用戶，可參考 [Normal user](#Normal-user) 部分  
-大部分 Linux 都有現成 gnu parallel 可安裝，可用套件管理指令安裝(如apt/yum)。  
-缺點是提供的可能都 out-of-date 沒更新了。  
-這邊列舉 rpm 是作者維護的版本，隨時會保持最新。  
-除此之外，還可透過 [conda-forge](https://anaconda.org/conda-forge/parallel) 安裝 gnu parallel。
+# GNU Parallel installation note
+- env :  linux/x86_64/bash
+- link : [kmo/notes_gnu_parallel_install](https://hackmd.io/@kmo/notes_gnu_parallel_install)
+- 說明 :  
+gnu parallel 安裝筆記，適用大部分 Linux 系統  
+這邊列舉 rpm 是作者維護的版本，隨時會保持最新  
+除此之外，還可透過 [conda-forge](https://anaconda.org/conda-forge/parallel)，由社群持續更新的 gnu parallel  
+其他系統，可參考[官網](https://www.gnu.org/software/parallel/)提及 Official packages exist for
 
-## Superuser
-- superuser privilege (you can use sudo command)
-- install gnu parellel by rpm
-### RHEL/CentOS
+# Package Manager
+
+- install gnu parallel through package manager
+
+
+## yum (RHEL/CentOS)
 
 - create repo file
-
+- RHEL
 ```bash=
-cat << EOF | sudo tee -a /etc/yum.repos.d/gnu_parallel.repo
+cat << EOF > /etc/yum.repos.d/gnu_parallel.repo
 [gnu_parallel]
-name=tanges Home Project (CentOS_7)
+name=tanges Project (RHEL_7)
+type=rpm-md
+baseurl=https://download.opensuse.org/repositories/home:/tange/RHEL_7/
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/home:/tange/RHEL_7/repodata/repomd.xml.key
+enabled=1
+EOF
+```
+- CentOS
+```bash=
+cat << EOF > /etc/yum.repos.d/gnu_parallel.repo
+[gnu_parallel]
+name=tanges Project (CentOS_7)
 type=rpm-md
 baseurl=https://download.opensuse.org/repositories/home:/tange/CentOS_7/
 gpgcheck=1
@@ -39,8 +43,6 @@ gpgkey=https://download.opensuse.org/repositories/home:/tange/CentOS_7/repodata/
 enabled=1
 EOF
 ```
-
-
 - install
 ```bash=
 sudo yum install parallel
@@ -50,40 +52,71 @@ sudo yum install parallel
 sudo yum remove parallel
 ```
 
-### Other Linux distribution
-
-- take a look whether already builded deb/rpm etc.
-https://build.opensuse.org/repositories/home:tange/parallel
-https://www.gnu.org/software/parallel
-- or through [Normal user steps](#Normal-user)
-
-## Normal user 
-- no superuser privilege (you can not use sudo command)
-- install gnu parallel through conda 
-
-### conda
-- install gnu parallel through conda-forge channel.
-- prepare and install conda first  
-https://docs.conda.io/projects/conda/en/latest/user-guide/install
+## conda (Linux/Windows/macOS)
+- install gnu parallel through [conda-forge channel](https://anaconda.org/conda-forge/parallel)
 - install
 ```bash=
-conda create --name gnu_parallel --channel conda-forge parallel
+conda create --name parallel_env --channel conda-forge parallel
 ```
 - use
 ```bash=
-conda activate gnu_parallel
+conda activate parallel_env
 ```
 
 - uninstall
 ```bash=
-conda remove --name gnu_parallel --all
+conda remove --name parallel_env --all
+```
+
+# Manual Installation
+
+- required command : perl, bzip2
+- install to ~/parallel
+```bash=
+# change directory to /tmp
+cd /tmp
+
+# download
+wget https://ftpmirror.gnu.org/parallel/parallel-latest.tar.bz2
+
+# untar *.tar.bz2
+tar jxvf parallel-latest.tar.bz2
+
+# change directory to parallel directory 
+cd parallel-*
+
+# configure, make and install
+./configure --prefix=/home/$USER/parallel && make && make install
+
+# add gnu parallel path to environment variable
+cat << EOF >> ~/.bash_profile
+PATH=~/parallel/bin:\$PATH #_gnu_parallel_path_#
+EOF
+
+# clean
+rm -r /tmp/parallel-*
+```
+- logout (Ctrl+D) and login for initializing ~/.bash_profile
+- check installation successful
+```bash=
+parallel --help
+man parallel
+```
+
+- uninstall
+```bash=
+# remove gnu parallel
+rm -r ~/parallel
+
+# remove rclone_path in profile
+sed -i '/#_gnu_parallel_path_#/d' ~/.bash_profile
 ```
 
 
 # reference
 - https://www.gnu.org/software/parallel
 - https://build.opensuse.org/repositories/home:tange/parallel
-
+- README in parallel-latest.tar.bz2
 
 
 ---
