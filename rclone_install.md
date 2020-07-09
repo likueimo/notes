@@ -9,7 +9,7 @@ tags: notes, install, rclone
 rclone 安裝筆記，適用大部分 Linux 系統  
 rclone 是 go 語言撰寫，無 library 相依性問題  
 編譯好後可直接執行  
-可直接下載作者預編譯好的檔案使用
+可直接下載 rclone 作者預編譯好的檔案使用
 
 # Package Manager
 
