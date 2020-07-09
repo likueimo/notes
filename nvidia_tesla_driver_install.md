@@ -6,7 +6,7 @@ tags: notes, install, driver, nvidia
 
 - env :  centos7/x86_64/bash
 - link : [kmo/notes_nvidia_tesla_driver_install](https://hackmd.io/@kmo/notes_nvidia_tesla_driver_install)
-- 說明 : 
+- 說明 :  
   此文是紀錄維運的系統安裝筆記
 
 ## Check GPU type
@@ -30,8 +30,8 @@ lshw -numeric -C display | grep -i Tesla
 ![Imgur](https://i.imgur.com/vnmzZGx.png)
 
 ## Create repo
-- 建議把 cluster 的 yum 導向內網的 repo server，
-故把下載好的 rpm 解壓縮，放置 repo server 的指定位置
+- 建議把 cluster 的 yum 導向內網的 repo server，  
+  故把下載好的 rpm 解壓縮，放置 repo server 的指定位置
 - local repo server 
 ```bash=
 # download
@@ -45,7 +45,6 @@ mv ./var/nvidia-driver-local-repo-rhel7-450.51.05 nv_rpms_450.51.05
 ```
 - cluster node
 - /etc/yum.repos.d/nvidia-local.repo
-
 ```bash=
 [nv-450.51.05]
 name=yum repository for nv_rpms_450.51.05
@@ -55,15 +54,17 @@ gpgcheck=0
 ```
 
 ## Install
-
 - install precompiled driver
-
 ```bash=
 yum install cuda-drivers
 ```
 
 ## reference
-
 - http://developer.download.nvidia.com/compute/cuda/preview/repos/rhel7/x86_64/README.html  
-
 ![Imgur](https://i.imgur.com/ke7ij1x.png)
+
+---
+[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]
+
+[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/ 
+[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
