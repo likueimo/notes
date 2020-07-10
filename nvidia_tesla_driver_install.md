@@ -35,7 +35,7 @@ lshw -numeric -C display | grep -i Tesla
 - local repo server 
 ```bash=
 # download
-wget http://tw.download.nvidia.com/tesla/450.51.05/nvidia-driver-local-repo-rhel7-450.51.05-1.0-1.x86_64.rpm
+curl -O http://tw.download.nvidia.com/tesla/450.51.05/nvidia-driver-local-repo-rhel7-450.51.05-1.0-1.x86_64.rpm
 
 # untar rpm
 rpm2cpio nvidia-driver-local-repo-rhel7-450.51.05-1.0-1.x86_64.rpm |cpio -idv
@@ -90,7 +90,7 @@ rpm -qp --scripts nvidia-driver-latest-450.51.05-1.el7.x86_64.rpm
 ![Imgur](https://i.imgur.com/ke7ij1x.png)
 
 ---
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
 
-[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/ 
-[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
