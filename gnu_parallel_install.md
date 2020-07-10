@@ -118,9 +118,8 @@ sed -i '/#_gnu_parallel_path_#/d' ~/.bash_profile
 - https://build.opensuse.org/repositories/home:tange/parallel
 - README in parallel-latest.tar.bz2
 
-
 ---
-[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa] This work is licensed under a [CC BY-SA 4.0][cc-by-sa]
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
 
-[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/ 
-[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
