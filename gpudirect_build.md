@@ -89,3 +89,9 @@ vermagic:       3.10.0-1127.el7.x86_64 SMP mod_unload modversions
 parm:           dbg_enabled:enable debug tracing (int)
 parm:           info_enabled:enable info tracing (int)
 ```
+
+---
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
+
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
