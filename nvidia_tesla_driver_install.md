@@ -53,10 +53,36 @@ enabled=1
 gpgcheck=0
 ```
 
-## Install
+## Install Tesla driver
 - install precompiled driver
 ```bash=
 yum install cuda-drivers
+```
+- start service
+```bash=
+systemctl start nvidia-persistenced
+```
+
+## Install DCGM
+- https://developer.nvidia.com/dcgm
+- 可以在安裝完 driver 後，檢查 Tesla GPU 健康狀況以及 GPU 壓力測是
+- start service
+```bash=
+systemctl start dcgm
+```
+- 壓力測試
+```bash=
+dcgmi diag -r 3
+```
+
+## Check rpm scripts
+- 檢查安裝的 rpm 的 pre/post scripts，掌握裝 nvidia driver 幫系統加了什麼
+- add nvidia-persistenced user (nvidia-persistenced-latest*.rpm)
+- add kernel cmd (nvidia-driver-latest-*.rpm)
+```bash=
+# check rpm pre/post scripts
+rpm -qp --scripts nvidia-persistenced-latest-450.51.05-1.el7.x86_64.rpm
+rpm -qp --scripts nvidia-driver-latest-450.51.05-1.el7.x86_64.rpm
 ```
 
 ## reference
