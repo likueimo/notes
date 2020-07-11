@@ -105,8 +105,8 @@ EOF
 rm rclone-current-linux-amd64.zip
 rm -r rclone-*-linux-amd64
 ```
-- logout (Ctrl+D) and login for initializing ~/.bash_profile
-- check installation successful
+- logout (Ctrl+D or exit) and login for initializing ~/.bash_profile
+- check installation success
 ```bash=
 rclone help
 man rclone
@@ -122,7 +122,7 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
 ```
 
 # Support Matrix
-- latest pre-compiled rclone [support matrix](https://rclone.org/downloads)
+- latest precompiled rclone [support matrix](https://rclone.org/downloads)
 
 ![](https://i.imgur.com/PkbyjKz.png)
 
