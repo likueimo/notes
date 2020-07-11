@@ -19,19 +19,6 @@ gnu parallel 安裝筆記，適用大部分 Linux 系統
 ## yum (RHEL/CentOS)
 
 - create repo file
-- RHEL
-```bash=
-cat << EOF > /etc/yum.repos.d/gnu_parallel.repo
-[gnu_parallel]
-name=tanges Project (RHEL_7)
-type=rpm-md
-baseurl=https://download.opensuse.org/repositories/home:/tange/RHEL_7/
-gpgcheck=1
-gpgkey=https://download.opensuse.org/repositories/home:/tange/RHEL_7/repodata/repomd.xml.key
-enabled=1
-EOF
-```
-- CentOS
 ```bash=
 cat << EOF > /etc/yum.repos.d/gnu_parallel.repo
 [gnu_parallel]
@@ -96,8 +83,8 @@ EOF
 # clean
 rm -r /tmp/parallel-*
 ```
-- logout (Ctrl+D) and login for initializing ~/.bash_profile
-- check installation successful
+- logout (Ctrl+D or exit) and login for initializing ~/.bash_profile
+- check installation success
 ```bash=
 parallel --help
 man parallel
