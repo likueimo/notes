@@ -8,14 +8,14 @@ tags: notes, install, rclone
 - 說明 :  
 rclone 安裝筆記，適用大部分 Linux 系統  
 rclone 是 go 語言撰寫，編譯好後可直接執行  
-所以除了透過 [Package Manger 安裝](#Package-Manager)  
+所以除了透過 [Package Manger 安裝](#Package-Manager)、[使用 singularity 容器](#Container)  
 也可選擇 [手動安裝](#Manual-Installation) rclone 作者編譯好的檔案使用 
 
 # Package Manager
 
 - install rclone through package manager
 
-## apt (Ubuntu/Debian)
+## apt-get (Ubuntu/Debian)
 
 - install 
 ```bash=
@@ -23,7 +23,7 @@ rclone 是 go 語言撰寫，編譯好後可直接執行
 curl -O https://downloads.rclone.org/rclone-current-linux-amd64.deb
 
 # install deb
-sudo apt install ./rclone-current-linux-amd64.deb
+sudo apt-get -y install ./rclone-current-linux-amd64.deb
 
 # clean
 rm rclone-current-linux-amd64.deb
@@ -32,19 +32,19 @@ rm rclone-current-linux-amd64.deb
 - uninstall 
 ```bash=
 # uninstall rclone
-sudo apt remove rclone
+sudo apt-get -y remove rclone
 ```
 
 ## yum (RHEL/CentOS)
 - install
 ```bash=
 # install rpm
-sudo yum install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
+sudo yum -y install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 ```
 - uninstall
 ```bash=
 # uninstall rclone
-sudo yum remove rclone
+sudo yum -y remove rclone
 ```
 
 ## pacman (Arch Linux/Manjaro Linux)
@@ -58,7 +58,7 @@ sudo pacman -S rclone
 sudo pacman -Rs rclone
 ```
 
-## conda (Linux/Windows/macOS)
+## conda (Linux)
 - install rclone through [conda-forge channel](https://anaconda.org/conda-forge/rclone)
 - install
 ```bash=
@@ -73,11 +73,24 @@ conda activate rclone_env
 conda remove --name rclone_env --all
 ```
 
-# Manual Installation
--  required command : 
-unzip
-- install to ~/rclone
+# Container
+- required command : singularity
+- pull image
+```bash=
+singularity build rclone.sif docker://rclone/rclone:latest
+```
+- use
+```bash=
+singularity exec rclone.sif rclone
+```
+- remove
+```bash=
+rm rclone.sif
+```
 
+# Manual Installation
+- required command : unzip
+- install to ~/rclone
 ```bash=
 # change directory to /tmp
 cd /tmp
@@ -137,6 +150,8 @@ sed -i '/#_rclone_path_#/d' ~/.bash_profile
   - https://github.com/conda-forge/rclone-feedstock
 - arch linux
   - https://wiki.archlinux.org/index.php/Pacman/Rosetta
+- singularity
+  - https://sylabs.io/docs
 
 ---
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
