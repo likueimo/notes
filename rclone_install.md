@@ -7,9 +7,9 @@ tags: notes, install, rclone
 - link : [kmo/notes_rclone_install](https://hackmd.io/@kmo/notes_rclone_install)
 - 說明 :  
 rclone 安裝筆記，適用大部分 Linux 系統  
-rclone 是 go 語言撰寫，無 library 相依性問題  
-編譯好後可直接執行  
-可直接下載 rclone 作者預編譯好的檔案使用
+rclone 是 go 語言撰寫，編譯好後可直接執行  
+所以除了透過 [Package Manger 安裝](#Package-Manager)  
+也可選擇 [手動安裝](#Manual-Installation) rclone 作者編譯好的檔案使用 
 
 # Package Manager
 
