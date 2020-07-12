@@ -25,25 +25,22 @@ curl -O https://downloads.rclone.org/rclone-current-linux-amd64.deb
 # install deb
 sudo apt-get -y install ./rclone-current-linux-amd64.deb
 
-# clean
+# clean deb
 rm rclone-current-linux-amd64.deb
 ```
 
 - uninstall 
 ```bash=
-# uninstall rclone
 sudo apt-get -y remove rclone
 ```
 
 ## yum (RHEL/CentOS)
 - install
 ```bash=
-# install rpm
 sudo yum -y install https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 ```
 - uninstall
 ```bash=
-# uninstall rclone
 sudo yum -y remove rclone
 ```
 
@@ -118,20 +115,26 @@ EOF
 rm rclone-current-linux-amd64.zip
 rm -r rclone-*-linux-amd64
 ```
+
 - logout (Ctrl+D or exit) and login for initializing ~/.bash_profile
 - check installation success
 ```bash=
 rclone help
 man rclone
 ```
-- uninstall
 
+- uninstall
 ```bash=
 # remove rclone
 rm -r ~/rclone
 
-# remove rclone_path in profile
+# remove rclone_path in ~/.bash_profile
 sed -i '/#_rclone_path_#/d' ~/.bash_profile
+```
+
+# Remove rclone config
+```bash=
+rm ~/.rclone.conf
 ```
 
 # Support Matrix
