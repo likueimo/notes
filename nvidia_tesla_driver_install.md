@@ -7,7 +7,7 @@ tags: notes, install, driver, nvidia
 - env :  CentOS 7 
 - arch : x86_64
 - link : [kmo/notes_nvidia_tesla_driver_install](https://hackmd.io/@kmo/notes_nvidia_tesla_driver_install)
-- 說明 :  此文是針對 Tesla 的 driver 安裝筆記
+- 說明 :  NVIDIA Tesla driver 安裝筆記
 
 ## 前言
 
