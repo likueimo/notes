@@ -2,15 +2,27 @@
 tags: notes, install, driver, nvidia
 ---
 
-# NVIDIA Tesla driver installation note
+# NVIDIA Tesla Driver installation note
 
-- env :  centos7/x86_64/bash
+- env :  CentOS 7 
+- arch : x86_64
 - link : [kmo/notes_nvidia_tesla_driver_install](https://hackmd.io/@kmo/notes_nvidia_tesla_driver_install)
-- 說明 :  
-  此文是紀錄維運的系統安裝筆記
+- 說明 :  此文是針對 Tesla 的 driver 安裝筆記
+
+## 前言
+
+Tesla 系列的 GPU 通常用於 
+Data Center 和 HPC 等大型機群的情境。  
+NVIDIA 針對 Tesla 的 Driver 特別拉出一份[文件](https://docs.nvidia.com/datacenter/tesla/index.html)說明，並有不同 [support 週期](https://docs.nvidia.com/datacenter/tesla/tesla-software-lifecycle/index.html)。  
+除此之外，建議 production 環境是從 NVIDIA Driver 頁面下載安裝，而非在 CUDA 安裝包裡面順道安裝 NVIDIA Driver。
+
+> 可以在 [CUDA release note](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html) 搜尋 `Tesla`，有上述最後一段的說明
+![](https://i.imgur.com/ANzZM6d.png)
+
+
 
 ## Check GPU type
-- 確認機器是 Tesla 型號
+- 確認 GPU 是 Tesla 型號
 ```bash=
 lshw -numeric -C display | grep -i Tesla
 ```
@@ -19,60 +31,66 @@ lshw -numeric -C display | grep -i Tesla
 - [Tesla Driver Release Notes](https://docs.nvidia.com/datacenter/tesla/index.html)
 - 建議查看 `Fixed Issues` 及 `Known Issues`
 
-## Choose Tesla driver version
+## Choose Tesla Driver version
 - [NVIDIA Tesla Driver Software Lifecycle Policy](https://docs.nvidia.com/datacenter/tesla/tesla-software-lifecycle/index.html)
-- 建議選擇 Long Term Service Branch (LTS)
-![Imgur](https://i.imgur.com/h40wA2O.png)
+- 建議選擇 Long Term Service Branch (LTS)  
+目前建議選擇 `R450` 系列。 [參考 Table ](https://docs.nvidia.com/datacenter/tesla/cuda-drivers-support/index.html)
+![](https://i.imgur.com/2pWOGeg.png)
 
-## Download Tesla driver
+## Download Tesla Driver
 - https://www.nvidia.com/Download/Find.aspx
 - 語言選 Chinse(Traditional)，下載的 link 會是 tw 網域
-![Imgur](https://i.imgur.com/vnmzZGx.png)
+![](https://i.imgur.com/DF8Eztx.png)
 
-## Create repo
-- 建議把 cluster 的 yum 導向內網的 repo server，  
-  故把下載好的 rpm 解壓縮，放置 repo server 的指定位置
+
+## Create local repository
+當維運上百上千台主機，建議有 local repository，並把機群的 yum 指向 local repo，以免因操作失誤而不預期升級 driver。  
+
 - local repo server 
 ```bash=
 # download
-curl -O http://tw.download.nvidia.com/tesla/450.51.05/nvidia-driver-local-repo-rhel7-450.51.05-1.0-1.x86_64.rpm
+curl -O https://tw.download.nvidia.com/tesla/450.80.02/nvidia-driver-local-repo-rhel7-450.80.02-1.0-1.x86_64.rpm
 
-# untar rpm
-rpm2cpio nvidia-driver-local-repo-rhel7-450.51.05-1.0-1.x86_64.rpm |cpio -idv
+# extract rpm
+rpm2cpio nvidia-driver-local-repo-rhel7-450.80.02-1.0-1.x86_64.rpm |cpio -idv
 
-# move directory to specify name
-mv ./var/nvidia-driver-local-repo-rhel7-450.51.05 nv_rpms_450.51.05
+# move directory to specify path
+mv ./var/nvidia-driver-local-repo-rhel7-450.80.02 nv_rpms_450.80.02
 ```
-- cluster node
-- /etc/yum.repos.d/nvidia-local.repo
+- 機群 (cluster node) 的 yum 設定 (/etc/yum.repos.d/nvidia-local.repo)
 ```bash=
-[nv-450.51.05]
-name=yum repository for nv_rpms_450.51.05
-baseurl=http://your_repo_server_ip_and_path/nv_rpms_450.51.05
+[nv-450.80.02]
+name=yum repository for nv_rpms_450.80.02
+baseurl=http://your_repo_server_ip_and_path/nv_rpms_450.80.02
 enabled=1
 gpgcheck=0
 ```
 
-## Install Tesla driver
-- install precompiled driver
+## Install Tesla Driver
+- install driver
 ```bash=
-yum install cuda-drivers
-```
-- start service
-```bash=
-systemctl start nvidia-persistenced
+yum clean expire-cache
+yum install nvidia-driver-latest-dkms
 ```
 
-## Install DCGM
-- https://developer.nvidia.com/dcgm
-- 可以在安裝完 driver 後，檢查 Tesla GPU 健康狀況以及 GPU 壓力測是
-- start service
+
+## Install Data Center GPU Manager (DCGM)
+- https://developer.nvidia.com/dcgm (建議註冊)
+- DCGM 可以檢查 Tesla GPU 健康狀況以及 GPU 壓力測試，建議一併安裝
+- 下載後可以一併加入 local repo，如同安裝 driver 方法
 ```bash=
-systemctl start dcgm
+# download
+curl -O https://developer.download.nvidia.com/compute/redist/dcgm/2.0.13/RPMS/x86_64/datacenter-gpu-manager-2.0.13-1-x86_64.rpm
+
+# install 
+yum install datacenter-gpu-manager
 ```
-- 壓力測試
+
+## Enable service and reboot
+
 ```bash=
-dcgmi diag -r 3
+systemctl enable nvidia-persistenced dcgm
+reboot
 ```
 
 ## Check rpm scripts
@@ -81,13 +99,17 @@ dcgmi diag -r 3
 - add kernel cmd (nvidia-driver-latest-*.rpm)
 ```bash=
 # check rpm pre/post scripts
-rpm -qp --scripts nvidia-persistenced-latest-450.51.05-1.el7.x86_64.rpm
-rpm -qp --scripts nvidia-driver-latest-450.51.05-1.el7.x86_64.rpm
+rpm -qp --scripts nvidia-persistenced-latest-dkms-450.80.02-1.el7.x86_64.rpm
+rpm -qp --scripts nvidia-driver-latest-dkms-450.80.02-1.el7.x86_64.rpm
 ```
 
-## reference
-- http://developer.download.nvidia.com/compute/cuda/preview/repos/rhel7/x86_64/README.html  
-![Imgur](https://i.imgur.com/ke7ij1x.png)
+# Ansible
+NVIDIA 有維護安裝 driver 的 ansible role。
+- https://github.com/NVIDIA/ansible-role-nvidia-driver
+
+# 其他相關
+- https://github.com/NVIDIA/yum-packaging-precompiled-kmod
+- https://github.com/NVIDIA/yum-packaging-nvidia-plugin
 
 ---
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
