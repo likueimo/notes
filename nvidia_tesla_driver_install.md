@@ -73,7 +73,6 @@ yum clean expire-cache
 yum install nvidia-driver-latest-dkms
 ```
 
-
 ## Install Data Center GPU Manager (DCGM)
 - https://developer.nvidia.com/dcgm (建議註冊)
 - DCGM 可以檢查 Tesla GPU 健康狀況以及 GPU 壓力測試，建議一併安裝
@@ -87,7 +86,6 @@ yum install datacenter-gpu-manager
 ```
 
 ## Enable service and reboot
-
 ```bash=
 systemctl enable nvidia-persistenced dcgm
 reboot
