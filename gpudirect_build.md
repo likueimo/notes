@@ -3,31 +3,31 @@ tags: notes, build, rpm, gpudirect
 ---
 
 # Build GPUDirect rpms
-- env :  centos7/x86_64/bash
+- env : CentOS 7 
+- arch : x86_64
 - link : [kmo/notes_gpudirect_build](https://hackmd.io/@kmo/notes_gpudirect_build)
-- 說明 :  
-此文是紀錄維運的系統編譯筆記
+- 說明 : nv_peer_mem and gdrcopy 編譯筆記
 
 ## Mellanox GPUDirect (nv_peer_mem)
 - https://github.com/Mellanox/nv_peer_memory
 - [Mellanox GPUDirect 官網](https://www.mellanox.com/products/GPUDirect-RDMA)
-- [Mellanox GPUDirect 文件](https://www.mellanox.com/related-docs/prod_software/Mellanox_GPUDirect_User_Manual.pdf)
-- 加速 GPU 計算非常重要的 kernel module 和 service
+- [Mellanox GPUDirect 文件](https://docs.mellanox.com/category/gpudirect)
+- 加速 GPU 計算非常重要的 kernel module 以及 service
 - 和 OS kernel、NVIDIA Driver、Mellanox OFED 有相依性，要是上述 3 樣有任一版本升版，
 建議重編譯 nvidia-peer-memory 的 rpm
 - Build and copy rpm
 ```bash=
 # build
 cd /tmp
-wget https://github.com/Mellanox/nv_peer_memory/archive/1.0-9.tar.gz
-tar -zxvf 1.0-9.tar.gz
-cd nv_peer_memory-1.0-9
+wget https://www.mellanox.com/sites/default/files/downloads/ofed/nvidia-peer-memory_1.1.tar.gz
+tar -zxvf nvidia-peer-memory_1.1.tar.gz
+cd nvidia-peer-memory-1.1
 ./build_module.sh
-rpmbuild --rebuild /tmp/nvidia_peer_memory-1.0-9.src.rpm
+rpmbuild --rebuild /tmp/nvidia_peer_memory-1.1-0.src.rpm
 
 # copy rpm and src.rpm to repo server
-rsync -avP /tmp/nvidia_peer_memory-1.0-9.src.rpm $repo_server
-rsync -avP /root/rpmbuild/RPMS/x86_64/nvidia_peer_memory-1.0-9.x86_64.rpm $repo_server
+rsync -avP /tmp/nvidia_peer_memory-1.1-0.src.rpm $repo_server
+rsync -avP /root/rpmbuild/RPMS/x86_64/nvidia_peer_memory-1.1-0.x86_64.rpm $repo_server
 ```
 - Check deps
 ```bash=
@@ -38,7 +38,7 @@ extra/nv_peer_mem.ko: extra/nvidia.ko.xz extra/mlnx-ofa_kernel/drivers/infiniban
 # check with modinfo
 $ modinfo nv_peer_mem
 filename:       /lib/modules/3.10.0-1127.el7.x86_64/extra/nv_peer_mem.ko
-version:        1.0-9
+version:        1.1-0
 license:        Dual BSD/GPL
 description:    NVIDIA GPU memory plug-in
 author:         Yishai Hadas
