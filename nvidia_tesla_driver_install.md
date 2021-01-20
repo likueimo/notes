@@ -71,6 +71,8 @@ gpgcheck=0
 ```bash=
 yum clean expire-cache
 yum install nvidia-driver-latest-dkms
+# if you will install x window, then continue
+yum install cuda-drivers
 ```
 
 ## Install Data Center GPU Manager (DCGM)
