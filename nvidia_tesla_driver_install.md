@@ -8,14 +8,14 @@ tags: notes, install, driver, nvidia
 
 ## 前言
 - Tesla 系列的 GPU 通常用於 Data Center、HPC 等大型機群的情境  
-NVIDIA 針對 Tesla 的 Driver 特別拉出一份[文件](https://docs.nvidia.com/datacenter/tesla/index.html)說明，並有不同 [support 週期](https://docs.nvidia.com/datacenter/tesla/drivers/#lifecycle) 
-- 建議 production 避免從 CUDA 安裝包安裝 Driver，而是從 NVIDIA Driver 頁面下載安裝
+NVIDIA 針對 Tesla 的 driver 特別拉出一份[文件](https://docs.nvidia.com/datacenter/tesla/index.html)說明，並有不同 [support 週期](https://docs.nvidia.com/datacenter/tesla/drivers/#lifecycle) 
+- production 環境應避免從 CUDA 安裝包安裝 driver，而是從 NVIDIA driver 頁面下載安裝
   - 在 [CUDA release note](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html) 搜尋 `Tesla`，有此說明 ![](https://i.imgur.com/zTe18Gt.png =500x)
 
 ## 檢查 GPU 型號
-- 列出系統的 NVIDIA 設備，確認 GPU 是 Tesla 型號
+- 列出系統的 NVIDIA 設備，並確認 GPU 是 Tesla 型號
 ```bash=
-lspci -d 10DE:
+lspci -d 10DE: | grep -i tesla
 ```
 - `10DE` 是 NVIDIA 的 PCIE 代碼
 - ref : https://devicehunt.com/view/type/pci/vendor/10DE
@@ -72,7 +72,7 @@ yum install cuda-drivers
 
 
 ## 啟用 Service 以及重開機
-- 建議啟用 `nvidia-persistenced`
+- 安裝完 driver，建議啟用 service `nvidia-persistenced`
 ```bash=
 # 啟用 nvidia-persistenced
 systemctl enable nvidia-persistenced.service
@@ -82,7 +82,7 @@ systemctl reboot
 ```
 
 ## 檢查 RPM script
-- 檢查安裝的 rpm 的 pre/post 的 script，掌握裝 driver 執行了什麼動作
+- 檢查 rpm 的 pre/post 的 script，掌握裝 driver 的 rpm 時，額外執行了什麼動作
 - 比如有 
   - 新增 nvidia-persistenced user (nvidia-persistenced-latest*.rpm)
   - 新增 kernel cmd (nvidia-driver-latest-*.rpm)
@@ -96,6 +96,7 @@ rpm -qp --scripts nvidia-driver-latest-dkms-$NV_VER*.rpm
 ## Ansible
 - NVIDIA 有維護安裝 driver 的 ansible role
 - ref : https://github.com/NVIDIA/ansible-role-nvidia-driver
+
 
 ---
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
