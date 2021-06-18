@@ -3,7 +3,7 @@ tags: notes, install, driver, nvidia
 ---
 
 # NVIDIA Tesla Driver 安裝筆記
-- 測試環境 :  CentOS 7 x86_64
+- 測試環境 : CentOS 7 x86_64
 - 本文連結 : https://hackmd.io/@kmo/notes_nvidia_tesla_driver_install
 
 ## 前言
@@ -40,7 +40,7 @@ lspci -d 10DE: | grep -i tesla
 - local yum repository server 
 ```bash=
 # 下載指定版本 driver 
-curl -O https://tw.download.nvidia.com/tesla/450.119.04/nvidia-driver-local-repo-rhel7-450.119.04-1.0-1.x86_64.rpm
+curl -R -O https://tw.download.nvidia.com/tesla/450.119.04/nvidia-driver-local-repo-rhel7-450.119.04-1.0-1.x86_64.rpm
 
 # 解壓縮 rpm
 rpm2cpio nvidia-driver-local-repo-rhel7-450.119.04-1.0-1.x86_64.rpm | cpio -idv
@@ -71,15 +71,25 @@ yum install cuda-drivers
 - ref : https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html
 
 
-## 啟用 Service 以及重開機
+## 啟用 Service 以及檢查測試
 - 安裝完 driver，建議啟用 service `nvidia-persistenced`
 ```bash=
-# 啟用 nvidia-persistenced
-systemctl enable nvidia-persistenced.service
+# 啟用 nvidia-persistenced 
+systemctl start nvidia-persistenced
 
-# 重開機
+# 開機自動啟用 nvidia-persistenced
+systemctl enable nvidia-persistenced
+
+# 檢查 driver 版本
+cat /proc/driver/nvidia/version
+
+# 測試基本指定能否正常執行和顯示
+nvidia-smi 
+
+# 如果有異常，可能需要重開機
 systemctl reboot
 ```
+ref : https://stackoverflow.com/a/13127714
 
 ## 檢查 RPM script
 - 檢查 rpm 的 pre/post 的 script，掌握裝 driver 的 rpm 時，額外執行了什麼動作
@@ -93,6 +103,71 @@ rpm -qp --scripts nvidia-persistenced-latest-dkms-$NV_VER*.rpm
 rpm -qp --scripts nvidia-driver-latest-dkms-$NV_VER*.rpm
 ```
 
+:::spoiler 檢查 `nvidia-persistenced-latest-dkms` 的 script
+- `rpm -qp --scripts nvidia-persistenced-latest-dkms-450.119.04-1.el7.x86_64.rpm`
+- output
+```bash=
+preinstall scriptlet (using /bin/sh):
+getent group nvidia-persistenced >/dev/null || groupadd -r nvidia-persistenced
+getent passwd nvidia-persistenced >/dev/null || \
+    useradd -r -g nvidia-persistenced -d /var/run/nvidia-persistenced -s /sbin/nologin \
+    -c "NVIDIA persistent software state" nvidia-persistenced
+exit 0
+postinstall scriptlet (using /bin/sh):
+
+if [ $1 -eq 1 ] ; then
+        # Initial installation
+        systemctl preset nvidia-persistenced.service >/dev/null 2>&1 || :
+fi
+preuninstall scriptlet (using /bin/sh):
+
+if [ $1 -eq 0 ] ; then
+        # Package removal, not upgrade
+        systemctl --no-reload disable nvidia-persistenced.service > /dev/null 2>&1 || :
+        systemctl stop nvidia-persistenced.service > /dev/null 2>&1 || :
+fi
+postuninstall scriptlet (using /bin/sh):
+
+systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ] ; then
+        # Package upgrade, not uninstall
+        systemctl try-restart nvidia-persistenced.service >/dev/null 2>&1 || :
+fi
+```
+:::
+
+:::spoiler 檢查 `nvidia-driver-latest-dkms` 的 script
+- `rpm -qp --scripts nvidia-driver-latest-dkms-450.119.04-1.el7.x86_64.rpm`
+- output
+```bash=
+postinstall scriptlet (using /bin/sh):
+/usr/sbin/grubby --update-kernel=ALL --args='nouveau.modeset=0 rd.driver.blacklist=nouveau' &>/dev/null
+. /etc/default/grub
+if [ -z "${GRUB_CMDLINE_LINUX}" ]; then
+  echo GRUB_CMDLINE_LINUX="nouveau.modeset=0 rd.driver.blacklist=nouveau" >> /etc/default/grub
+else
+  for param in nouveau.modeset=0 rd.driver.blacklist=nouveau; do
+    echo ${GRUB_CMDLINE_LINUX} | grep -q $param
+    [ $? -eq 1 ] && GRUB_CMDLINE_LINUX="${GRUB_CMDLINE_LINUX} ${param}"
+  done
+  sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_LINUX}\"|g" /etc/default/grub
+fi
+if [ "$1" -eq "2" ]; then
+  # Remove no longer needed options
+  /usr/sbin/grubby --update-kernel=ALL --remove-args='nomodeset gfxpayload=vga=normal' &>/dev/null
+  for param in nomodeset gfxpayload=vga=normal; do
+    sed -i -e "s|$param ||g" /etc/default/grub
+  done
+fi || :
+preuninstall scriptlet (using /bin/sh):
+if [ "$1" -eq "0" ]; then
+  /usr/sbin/grubby --update-kernel=ALL --remove-args='nouveau.modeset=0 rd.driver.blacklist=nouveau' &>/dev/null
+  for param in nouveau.modeset=0 rd.driver.blacklist=nouveau; do
+    sed -i -e "s|$param ||g" /etc/default/grub
+  done
+fi ||:
+```
+:::
 ## Ansible
 - NVIDIA 有維護安裝 driver 的 ansible role
 - ref : https://github.com/NVIDIA/ansible-role-nvidia-driver
