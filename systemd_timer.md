@@ -135,3 +135,10 @@ systemctl enable foo.timer
 - https://wiki.archlinux.org/title/systemd
 - https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 :::
+
+
+---
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
+
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
