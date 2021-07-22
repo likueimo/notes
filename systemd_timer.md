@@ -7,6 +7,7 @@ tags: notes, timer, systemd
 - systemd timer 可取代 crontab，較易 debug 和操作，推薦重要的工作可以花時間改寫
 - 為了避免文章過於複雜，簡化或省略部分功能描述
 - 本文假設用戶有 root 權限
+- 本文連結 : https://hackmd.io/@kmo/notes_systemd_timer
 
 ## systemd timer 好處
 ::: spoiler 
