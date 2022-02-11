@@ -3,6 +3,7 @@ tags: notes, jnlp, java
 ---
 
 # 開啟 *.jnlp 檔案的方式
+> 本文連結: https://hackmd.io/@kmo/notes_jnlp
 
 :::info
 #### 情境描述
@@ -53,6 +54,7 @@ tags: notes, jnlp, java
 - 使用 2019 年以前的 Oracle JRE (最後一版是 8u202)，Oracle 並不會針對企業收費，但可能有安全性風險
 - 網友備份安裝檔 [github 連結](https://github.com/frekele/oracle-java/releases/tag/8u202-b08)，阿榮福利味也可以[下載舊版](https://www.azofreeware.com/2007/04/windows-platform-javatm-se-runtime.html)
 - 開啟 *.jnlp 僅需要安裝 JRE (Java Runtime Environment)，例如安裝 `jre-8u202-windows-x64.exe` 即可
+- 注意，請不要按到更新，或是去設定把檢查更新關閉，避免手殘按到
 :::
 
 ## 技術細節補充
