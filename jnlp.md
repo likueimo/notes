@@ -4,7 +4,7 @@ tags: notes, jnlp, java
 
 # 開啟 *.jnlp 檔案的方式
 > 本文連結: https://hackmd.io/@kmo/notes_jnlp  
-> 才疏學淺，任何謬誤都歡迎登入 hackmd 後修改本文內容  :) 
+> 才疏學淺，任何謬誤都歡迎在 hackmd 留言，或直接登入 hackmd 後修改本文內容 :) 
 
 :::info
 #### 情境描述
@@ -39,6 +39,7 @@ tags: notes, jnlp, java
 - 背後需要裝有 java (OpenJDK) 來啟動
 - 底下列出 2 個知名的 prebuilt 的 OpenJDK 專案，需同時安裝 IcedTea + OpenJDK
 - IcedTea 會讀 `JAVA_HOME` 變數，`JAVA_HOME` 變數內容為 OpenJDK 的路徑。安裝過程若沒設定需自行設定
+- ps: 其實前述 OpenWebStart 背後也是採用 IcedTea + OpenJDK，再額外設計進階設定面板等等
 ### azul(zulu)
 - [IcedTea](https://www.azul.com/products/components/icedtea-web) | [OpenJDK](https://www.azul.com/downloads)   
   (依據 azul 的 IcedTea 網頁說明，OpenJDK 版本請選擇 8 or 11)  
@@ -54,17 +55,20 @@ tags: notes, jnlp, java
 - 網友備份安裝檔 [github 連結](https://github.com/frekele/oracle-java/releases/tag/8u202-b08)
 - 開啟 *.jnlp 僅需要安裝 JRE (Java Runtime Environment)，建議下載 `jre-*.tar.gz`(避免自動更新的步驟)。並加上 `PATH` 和 `JAVA_HOME`，即可用 `javaws` 指令開啟 *.jnlp
   [環境變數參考說明](https://www.java.com/en/download/help/path.html)
-- 舉例來說，在 Windows 平台下載 `jre-8u202-windows-x64.tar.gz`，解壓縮後放到 `C:\Program Files\JAVA\jre1.8.0_202` 資料夾。並在環境變數新增 `JAVA_HOME`，以及在環境變數 `Path` 加上 java 的 bin 路徑
-   - `JAVA_HOME`: `C:\Program Files\JAVA\jre1.8.0_202`
-   - `PATH`: `C:\Program Files\JAVA\jre1.8.0_202\bin`
+- 舉例來說
+  - 在 Windows 平台下載 `jre-8u202-windows-x64.tar.gz`
+  - 解壓縮後放到 `C:\Program Files\JAVA\jre1.8.0_202` 資料夾
+  - 在環境變數新增 `JAVA_HOME`，以及在環境變數 `Path` 加上 java 的 bin 路徑
+    - `JAVA_HOME`: `C:\Program Files\JAVA\jre1.8.0_202`
+    - `PATH`: `C:\Program Files\JAVA\jre1.8.0_202\bin`
 - 打開 Powershell 之類環境，下指令如下  
-  `javaws.exe -verbose https://yourservice_ip:yourservice_ports/jnlp`
+  `javaws.exe -silent -system https://service_ip:service_port/jnlp`
 :::
 
 ## 技術細節補充
 ::: spoiler
 - *.jnlp 是類似 xml 的描述檔案，是已被拋棄的技術。新版 java 已不提供 javaws 指令來開啟
-- 社群 prebuilt 的 OpenJDK 不是全功能都能取代 Oracle Java。可參考 adoptium 做的對照表 https://adoptopenjdk.net/migration.html
+- 社群 prebuilt 的 OpenJDK 不是全功能都能取代 Oracle Java [參考 adoptium 做的對照表](https://adoptopenjdk.net/migration.html) 
 ![](https://i.imgur.com/8pD89fa.png =x350)
 - 僅有 Oracle, Azul, BellSoft 和 Amazon 提供的 java 有包 JavaFX 
 :::
