@@ -6,7 +6,7 @@ tags: notes, shell, scripts, bash
 
 > 一直到今天還有人深信，透過 shc 就能"加密" shell script  
 > 特別寫一篇來澄清這個觀念  
-
+>
 > 本文連結: https://hackmd.io/@kmo/decrypt_shc  
 > 任何回饋歡迎留言在此篇 hackmd，或直接登入 hackmd 後修改本文內容 :)  
 
