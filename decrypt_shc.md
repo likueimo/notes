@@ -23,8 +23,8 @@ env SHELLOPTS=verbose ./foo.sh.x
 ```
 - ref: https://unix.stackexchange.com/a/64765
 
-## 那我該怎麼做?
-- 若系統管理員，不希望一般 user 看到 script 的內容，可考慮朝 `/etc/sudoers.d/` 這邊發展(之後再補一篇來舉例)
+## 那我該怎麼做? (歡迎大家補充)
+- 若系統管理員，不希望一般 user 看到 script 的內容，可考慮利用 linux 權限機制，比如朝 `/etc/sudoers.d/` 這邊發展(之後再補一篇來舉例)
 - 若是廠商交付給客戶，不希望客戶看到 script 的內容，可能要改用其他真的能 compile 的語言，或是透過合約之類，嚴格規範 script 的使用範圍限制
 
 ---
