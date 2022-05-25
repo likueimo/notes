@@ -1,4 +1,4 @@
-# bash script 的 for loop 並行化 (Concurrency)
+# Shell script 的並行化 (Concurrency)
  
 > 本文目標是讓初學腳本的新手，較易入門學會腳本並行化  
 > 設計 2 個小試身手，加上 1 個最近我用到的實際使用情境  
@@ -29,8 +29,8 @@
 
 :::
 
-> 情境假設電腦有 4 cores，通常並行的 process 要等於小於電腦的 core 數
-> 所以底下都用 4 個並行 process 為例子，可以根據你自己環境，修改數字測試
+> 情境假設電腦有 4 cores，通常並行的 process 要等於小於電腦的 core 數  
+> 所以底下都用 4 個並行 process 為例子，可以根據你自己環境，修改數字測試  
 
 ## 小試身手 - 單一迴圈
 :::info 
@@ -179,7 +179,7 @@ parallel --jobs 4 --progress curl -sku usr:pw https://10.50.{1}.{2}/redfish/v1/S
 parallel --jobs 4 --progress curl -sku usr:pw -H 'Content-Type: application/json' -X PATCH -d @update_bios.json https://10.50.{1}.{2}/redfish/v1/Systems/1/bios/settings ::: {1..3} ::: {1..40}
 ```
 - 方法 2，搭配 bash 的 function 用法
-- 好處是可以讓複雜的操作更簡單使用 gnu parallel，但搭配 function 語法要改，比如從 `{1}` 改成 `$1`
+- 好處是可以讓簡化複雜的操作，但搭配 function 語法要改，比如從 `{1}` 改成 `$1`
 ```bash=
 #!/bin/bash -eu
 
