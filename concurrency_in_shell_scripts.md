@@ -42,13 +42,14 @@
 ## 小試身手 - 單一迴圈
 :::info 
 :scroll: 情境說明:
-- 印出 1..100 的數字，每次印出 4 個數字
+- 印出 1..100 的數字，每次處理 4 個數字
 :::
 
 ### GNU Parallel 方法
 ::: spoiler 
 - 透過 `{}` 可讀取 `:::` 右邊的 input，並透過 `--jobs` 指定同時執行 4 jobs
 - `{1..100}` 是 bash 語法，可產出連續數字
+- 這個例子主要是介紹指令 parallel 語法，實際執行會非常快，快到無法分辨每次執行 4 個 jobs XD 
 ```bash=
 parallel --jobs 4 "printf 'NUMB: %s\n' {}" ::: {1..100}
 ```
@@ -91,7 +92,7 @@ done
 - 印出 1-1, 1-2, 1-3 ... 1-39, 1-40，共 40 個數字
 - 印出 2-1, 2-2, 2-3 ... 2-39, 2-40，共 40 個數字
 - 印出 3-1, 3-2, 3-3 ... 3-39, 3-40，共 40 個數字
-- 每次印出 4 個數字
+- 每次處理 4 個數字
 ::: 
 
 
@@ -167,6 +168,7 @@ curl -sku usr:pw -H 'Content-Type: application/json' -X PATCH -d @update_bios.js
 :::
 
 :::warning
+:warning: 注意:
 - 本文 redfish api 指令範例是參考 [redfish 官方範例](https://www.dmtf.org/sites/default/files/Redfish_School-BIOS_Configuration.pdf)
 - 不同硬體廠牌的 api 都略有差異，實際應用務必查詢自己機器的 redfish 說明文件，或是詢問硬體 vendor
 - 更新 BIOS 設定的部分，部分廠牌機器需要先用 GET 取得 etag 值，在 PATCH 時候 header 指定 etag 值，來確保 PACTH 正確
@@ -186,7 +188,7 @@ parallel --jobs 4 --progress curl -sku usr:pw https://10.50.{1}.{2}/redfish/v1/S
 parallel --jobs 4 --progress curl -sku usr:pw -H 'Content-Type: application/json' -X PATCH -d @update_bios.json https://10.50.{1}.{2}/redfish/v1/Systems/1/bios/settings ::: {1..3} ::: {1..40}
 ```
 - 方法 2，搭配 bash 的 function 用法
-- 好處是可以讓簡化複雜的操作，但搭配 function 語法要改，比如從 `{1}` 改成 `$1`
+- 好處是可以簡化複雜的操作，但搭配 function 語法要改，比如從 `{1}` 改成 `$1`
 ```bash=
 #!/bin/bash -eu
 
