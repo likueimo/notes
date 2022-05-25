@@ -1,9 +1,13 @@
+---
+tags: notes, bash, shell, script
+---
+
 # Shell script 的並行化 (Concurrency)
  
-> 本文目標是讓初學腳本的新手，較易入門學會腳本並行化  
+> 本文目標是讓初學 shell script 的新手，入門學習腳本中 for loop 的並行化  
 > 設計 2 個小試身手，加上 1 個最近我用到的實際使用情境  
 > 共 3 個例子來熟悉並行化操作，每個例子都有 2 種作法實現  
-> 小試身手內容非常簡易，可以熟練，讓未來使用腳本的工作更有效率  
+> 小試身手內容非常簡易，可以熟練，讓未來撰寫的腳本更有效率  
 >
 > 本文連結: https://hackmd.io/@kmo/concurrency_in_shell_scripts  
 > 任何回饋歡迎留言在此篇 hackmd，或直接登入 hackmd 後修改本文內容 :)  
@@ -15,9 +19,9 @@
 [TOC]
 
 ::: success
-:memo: 本文範例都有 2 種實踐方法，方法分別如下
+:memo: 本文範例都有 2 種實現方法，方法分別如下
 - GNU Parallel: 
-  GNU Parallel 由 Perl 語言撰寫的指令，可以用一行指令實踐並行化
+  GNU Parallel 由 Perl 語言撰寫的指令，可以用一行指令實現並行化
   - 優點: 已發展 20 年，功能強大，不限於 bash 內使用，可呼叫 cmd 腳本或程式都能使用
   - 優點: 大部分的 for loop 工作，通常只需要一行 parallel 指令即可完成
   - 缺點: 由 Perl 語言撰寫，需安裝套件才能使用，有些特殊環境可能不易安裝套件 
@@ -33,7 +37,7 @@
 ::: info 
 :bulb: Hint:  
 在 Windows 系統，可以啟用 WSL2 安裝 Ubuntu 容器，來使用 Shell 腳本 or GNU Parallel   
-也就是說，在 Windows 系統底下，也能輕易並行化處理工作
+也就是說，在 Windows 系統底下，也能輕易並行化處理工作 :thumbsup:	
 :::
 
 > 情境假設電腦有 4 cores，通常並行的 process 要等於小於電腦的 core 數  
@@ -42,16 +46,24 @@
 ## 小試身手 - 單一迴圈
 :::info 
 :scroll: 情境說明:
-- 印出 1..100 的數字，每次處理 4 個數字
+- 印出 1 到 100 的數字，一般 for loop 是每次處理 1 個數字
+```bash=
+#!/bin/bash
+
+for ii in {1..100}; do
+  echo "NUMB: $ii"
+done
+```
+- 請改次每次處理 4 個數字
 :::
 
 ### GNU Parallel 方法
 ::: spoiler 
 - 透過 `{}` 可讀取 `:::` 右邊的 input，並透過 `--jobs` 指定同時執行 4 jobs
 - `{1..100}` 是 bash 語法，可產出連續數字
-- 這個例子主要是介紹指令 parallel 語法，實際執行會非常快，快到無法分辨每次執行 4 個 jobs XD 
+- 這個例子主要是介紹 parallel 語法，執行會非常快，快到無法分辨每次執行 4 個 jobs :laughing:
 ```bash=
-parallel --jobs 4 "printf 'NUMB: %s\n' {}" ::: {1..100}
+parallel --jobs 4 echo 'NUMB: {}' ::: {1..100}
 ```
 :::
    
@@ -69,7 +81,7 @@ n_process=4
 for ii in {1..100}; do
   #透過 () 包住要執行指令，並且用 & 背景執行，達到並行處理
   (
-    printf 'NUMB: %s\n' "$ii"
+    echo "NUMB: $ii"
   ) &
   # 數字除以指定 process 數，當餘數為 0，使用 wait 等待所有 child process 完成
   remainder=$(( ii % n_process ))
@@ -92,7 +104,17 @@ done
 - 印出 1-1, 1-2, 1-3 ... 1-39, 1-40，共 40 個數字
 - 印出 2-1, 2-2, 2-3 ... 2-39, 2-40，共 40 個數字
 - 印出 3-1, 3-2, 3-3 ... 3-39, 3-40，共 40 個數字
-- 每次處理 4 個數字
+- 一般 for loop 是每次處理 1 個數字
+```bash=
+#!/bin/bash
+
+for ii in {1..3}; do
+  for jj in {1..40}; do
+    echo "NUMB: $ii-$jj"
+  done
+done
+```
+- 請改次每次處理 4 個數字
 ::: 
 
 
@@ -100,7 +122,7 @@ done
 ::: spoiler
 - 透過 `{1}` 讀取第一個 `:::` 右邊的 input，透過 `{2}` 讀取第二個 `:::` 右邊的 input，並透過 `--jobs` 指定同時執行 4 jobs
 ```bash=
-parallel --jobs 4 "printf 'NUMB: %s-%s\n' {1} {2}" ::: {1..3} ::: {1..40}
+parallel --jobs 4 echo 'NUMB: {1}-{2}' ::: {1..3} ::: {1..40}
 ```
 :::
   
@@ -117,7 +139,7 @@ n_process=4
 for ii in {1..3}; do
   for jj in {1..40}; do
   (
-    printf 'NUMB: %s-%s\n' "$ii" "$jj"
+    echo "NUMB: $ii-$jj"
   ) &
   # 數字除以指定 process 數，當餘數為 0，使用 wait 等待所有 child process 完成
   remainder=$(( jj % n_process ))
@@ -266,6 +288,12 @@ main_function
 ```
 :::
 
+## 後記
+::: spoiler
+- 小試身手的 parallel 搭配 echo，是為了簡化範例。搭配 printf 可能會被單引號搞混，一般而言 printf 較為通用，建議腳本的撰寫習慣，優先考慮 printf
+- 範例中的 2 種作法，parallel 應會比上述 bash built-in 範例快，原因是 parallel 已經考慮當 1 個 job 完成，馬上補新 job 去跑，而上述 bash built-in 範例，是 4 process 都做完後，才進行下一輪 4 process 運行。若要改善會讓 bash 腳本複雜許多，可以參考此[連結](https://unix.stackexchange.com/a/216475)中 `N processes with a FIFO-based semaphore` 範例
+:::
+
 
 ## 補充 GNU Parallel 常用的 options
 ::: spoiler
@@ -281,6 +309,8 @@ main_function
 - `-o`: 讓 curl 指令，產出結果存成指定檔案
 - `-w`: 讓 curl 指令執行結束時，印出資訊出來，比如 `-w return code %{http_code}`，印出 http 的回傳 code
 :::
+
+
 
 ## 參考資料
 ::: spoiler
