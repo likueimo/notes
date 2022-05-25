@@ -8,7 +8,7 @@
 > 本文連結: https://hackmd.io/@kmo/concurrency_in_shell_scripts  
 > 任何回饋歡迎留言在此篇 hackmd，或直接登入 hackmd 後修改本文內容 :)  
 >
-> ps: 在腳本領域，有些人習慣會稱做平行化 (parallel)  
+> ps: 在腳本領域，有些人習慣會稱做平行化 (parallelism)  
 > 但精準用法應該要用並行化 (concurrency) 來敘述  
 
 [TOC]
