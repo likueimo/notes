@@ -40,8 +40,12 @@ tags: notes, bash, shell, script
 也就是說，在 Windows 系統底下，也能輕易並行化處理工作 :thumbsup:	
 :::
 
-> 情境假設電腦有 4 cores，通常並行的 process 要等於小於電腦的 core 數  
-> 所以底下都用 4 個並行 process 為例子，可以根據你自己環境，修改數字測試  
+::: warning
+:open_book: 情境假設電腦有 4 cores，通常並行的 process (或稱 job) 要等於小於電腦的 core 數  
+所以底下都用 4 個並行 jobs 為例子，可以根據你自己環境，修改數字測試  
+(詳見 [後記](#後記) 有補充說明
+:::
+
 
 ## 小試身手 - 單一迴圈
 :::info 
@@ -54,7 +58,7 @@ for ii in {1..100}; do
   echo "NUMB: $ii"
 done
 ```
-- 請改次每次處理 4 個數字
+- 請改成每次處理 4 個數字
 :::
 
 ### GNU Parallel 方法
@@ -73,9 +77,9 @@ parallel --jobs 4 echo 'NUMB: {}' ::: {1..100}
 ```bash=
 #!/bin/bash
 
-# 指定要並行處理的 process 數量，
-# 假設電腦有 4 Cores，通常並行的 process 要等於小於電腦的 core 數
-n_process=4
+# 指定要並行處理的 process 數量，這邊用 job 稱呼
+# 假設電腦有 4 cores，通常並行的 job 數量，要等於小於電腦的 core 數
+n_jobs=4
 
 # 用 bash 語法 {}，產出連續數字，依序進到迴圈
 for ii in {1..100}; do
@@ -83,8 +87,8 @@ for ii in {1..100}; do
   (
     echo "NUMB: $ii"
   ) &
-  # 數字除以指定 process 數，當餘數為 0，使用 wait 等待所有 child process 完成
-  remainder=$(( ii % n_process ))
+  # 數字除以指定 job 數，當餘數為 0，使用 wait 等待所有 child process 完成
+  remainder=$(( ii % n_jobs ))
   if [ "$remainder" -eq 0 ]; then
     # 這行 printf 方便確認 wait 是在哪個數字時啟用，當需要確認時可以打開註解
     #printf 'WE ARE WAITING AT NUMB: %s\n' "$ii"
@@ -114,7 +118,7 @@ for ii in {1..3}; do
   done
 done
 ```
-- 請改次每次處理 4 個數字
+- 請改成每次處理 4 個數字
 ::: 
 
 
@@ -131,18 +135,19 @@ parallel --jobs 4 echo 'NUMB: {1}-{2}' ::: {1..3} ::: {1..40}
 ```bash=
 #!/bin/bash
 
-# 指定要並行處理的 process 數量，
-# 假設電腦有 4 Cores，通常並行的 process 要等於小於電腦的 core 數
-n_process=4
+# 指定要並行處理的 process 數量，這邊用 job 稱呼
+# 假設電腦有 4 cores，通常並行的 job 數量，要等於小於電腦的 core 數
+n_jobs=4
 
 # 用 bash 語法 {}，產出連續數字，依序進到迴圈
 for ii in {1..3}; do
   for jj in {1..40}; do
+  #透過 () 包住要執行指令，並且用 & 背景執行，達到並行處理
   (
     echo "NUMB: $ii-$jj"
   ) &
-  # 數字除以指定 process 數，當餘數為 0，使用 wait 等待所有 child process 完成
-  remainder=$(( jj % n_process ))
+  # 數字除以指定 job 數，當餘數為 0，使用 wait 等待所有 child process 完成
+  remainder=$(( jj % n_jobs ))
   if [ "$remainder" -eq 0 ]; then
     # 這行 printf 方便確認 wait 是在哪個數字時啟用，當需要確認時可以打開註解
     #printf 'WE ARE WAITING AT NUMB: %s-%s\n' "$ii" "$jj"
@@ -260,18 +265,20 @@ curl -sku usr:pw \
 }
 
 main_function(){
-# 指定要並行處理的 process 數量，
-# 假設電腦有 4 Cores，通常並行的 process 要等於小於電腦的 core 數
-n_process=4
+
+# 指定要並行處理的 process 數量，這邊用 job 稱呼
+# 假設電腦有 4 cores，通常並行的 job 數量，要等於小於電腦的 core 數
+n_jobs=4
 
 for ii in {1..3} ; do
   for jj in {1..40}; do
+  #透過 () 包住要執行指令，並且用 & 背景執行，達到並行處理
   (
   backup_bios_setting
   update_bios_setting
   ) &
-  # 數字除以指定 process 數，當餘數為 0，使用 wait 等待所有 child process 完成
-  remainder=$(( jj % n_process ))
+  # 數字除以指定 job 數，當餘數為 0，使用 wait 等待所有 child process 完成
+  remainder=$(( jj % n_jobs ))
   if [ "$remainder" -eq 0 ]; then
     # 這行 printf 方便確認 wait 是在哪個數字時啟用，當需要確認時可以打開註解
     #printf 'WE ARE WAITING AT 10.50.%s.%s\n' "$ii" "$jj"
@@ -290,6 +297,7 @@ main_function
 
 ## 後記
 ::: spoiler
+- 其實並行處理的 process (或稱 job) 數量，可以大於 core 數。當 1 個 job 很快就執行完，不佔多少 CPU 使用率，那 1 次指定比如 10 jobs，系統會 queue 住 jobs，並且很快消化完。反之，如果 1 個 job 吃很多 CPU 使用率，建議 1 次指定 job 數量，是 (core 數 - 1)，至少留 1  core 資源給系統運行
 - 小試身手的 parallel 搭配 echo，是為了簡化範例。搭配 printf 可能會被單引號和雙引號搞混，一般而言 printf 較為通用，建議腳本的撰寫習慣，優先考慮 printf
 - 範例中的 2 種作法，parallel 應會比上述 bash built-in 範例快，原因是 parallel 已經考慮當 1 個 job 完成，馬上補新 job 去跑，而上述 bash built-in 範例，是 4 process 都做完後，才進行下一輪 4 process 運行。若要改善會讓 bash 腳本複雜許多，可以參考此[連結](https://unix.stackexchange.com/a/216475)中 `N processes with a FIFO-based semaphore` 範例
 :::
