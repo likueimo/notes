@@ -290,7 +290,7 @@ main_function
 
 ## 後記
 ::: spoiler
-- 小試身手的 parallel 搭配 echo，是為了簡化範例。搭配 printf 可能會被單引號搞混，一般而言 printf 較為通用，建議腳本的撰寫習慣，優先考慮 printf
+- 小試身手的 parallel 搭配 echo，是為了簡化範例。搭配 printf 可能會被單引號和雙引號搞混，一般而言 printf 較為通用，建議腳本的撰寫習慣，優先考慮 printf
 - 範例中的 2 種作法，parallel 應會比上述 bash built-in 範例快，原因是 parallel 已經考慮當 1 個 job 完成，馬上補新 job 去跑，而上述 bash built-in 範例，是 4 process 都做完後，才進行下一輪 4 process 運行。若要改善會讓 bash 腳本複雜許多，可以參考此[連結](https://unix.stackexchange.com/a/216475)中 `N processes with a FIFO-based semaphore` 範例
 :::
 
