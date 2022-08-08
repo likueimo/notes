@@ -9,11 +9,10 @@ tags: notes, bash, tool, cli, curl
 > `curl` 在 [2019 的 7.66 版](https://daniel.haxx.se/blog/2019/07/22/curl-goez-parallel) 迎來新功能 `--parallel`，遊戲規則產生變化，我們不需再藉由外部工具如 `xargs` 或 `GNU Parallel`，即可達成並行化 (concurrency) 工作。curl 開發者持續新增和修正相關功能，建議若要使用此功能直接[選用最新版`curl`](https://curl.se/download.html)
 
 ::: warning
-撰文者為系統管理員，透過 server 的 BMC 提供的 redfish，演示 `--parallel` 功能
-測試環境為 Bash 搭配 curl `7.84.0` 
-
-本文連結: https://hackmd.io/@kmo/curl_parallel
-任何回饋歡迎留言在此篇 hackmd :)
+撰文者為系統管理員，測試環境為 Bash 搭配 curl `7.84.0`  
+透過 server 的 BMC 提供的 redfish，演示 `--parallel` 功能  
+本文連結: https://hackmd.io/@kmo/curl_parallel  
+任何回饋歡迎留言在此篇 hackmd :)  
 :::
 
 ## 實例演示
@@ -32,10 +31,11 @@ tags: notes, bash, tool, cli, curl
 # 群組 3 的電腦 IP 範圍
 10.50.3.[1-10] 
 ```
-- 透過 api 取得單一台電腦 BIOS 設定的範例
+- 透過 api 取得單一台電腦 BIOS 設定的範例  
 ```bash=
 curl -sku usr:pw 'https://10.50.1.1/redfish/v1/Systems/1/bios'
 ```
+- ps: 不同硬體廠牌的 api 都略有差異，實際應用務必查詢自己機器的 redfish 說明文件，或是詢問硬體 vendor
 :::
 
 ### 匹配多個 URL
@@ -100,10 +100,10 @@ code 000 url https://10.50.3.3/redfish/v1/Systems/1/bios
 
 
 ## 參考連結
-[Everything curl](https://everything.curl.dev): curl 開發者寫的 book，讚 
-[curl 的 manpage](https://curl.se/docs/manpage.html): 網頁上查詢 option 好用
-[curl 的 globbing 範例](https://unix.stackexchange.com/a/91574): stackoverflow 網友的範例
-[curl 的 parallel 範例](https://stackoverflow.com/a/71967814): stackoverflow 網友的範例
+[Everything curl](https://everything.curl.dev): curl 開發者寫的 book，讚  
+[curl 的 manpage](https://curl.se/docs/manpage.html): 網頁上查詢 option 好用  
+[curl 的 globbing 範例](https://unix.stackexchange.com/a/91574): stackoverflow 網友的範例  
+[curl 的 parallel 範例](https://stackoverflow.com/a/71967814): stackoverflow 網友的範例  
 
 
 
