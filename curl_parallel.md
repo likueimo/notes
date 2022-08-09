@@ -9,7 +9,7 @@ tags: notes, bash, tool, cli, curl
 > `curl` 在 [2019 的 7.66 版](https://daniel.haxx.se/blog/2019/07/22/curl-goez-parallel) 迎來新功能 `--parallel`，遊戲規則產生變化，我們不需再藉由外部工具如 `xargs` 或 `GNU Parallel`，即可達成並行化 (concurrency) 工作。curl 開發者持續新增和修正相關功能，建議若要使用此功能直接[選用最新版`curl`](https://curl.se/download.html)
 
 ::: warning
-撰文者為系統管理員，測試環境為 Bash 搭配 curl `7.84.0`  
+本篇撰文者為系統管理員，測試環境為 Bash 搭配 curl `7.84.0`  
 透過 server 的 BMC 提供的 redfish，演示 `--parallel` 功能  
 本文連結: https://hackmd.io/@kmo/curl_parallel  
 任何回饋歡迎留言在此篇 hackmd :)  
@@ -47,8 +47,8 @@ curl -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios'
 - 實務上會希望把 bios 設定檔備份下來，但 URL 結尾名稱都是 `bios`，若使用 `-O` 直接存檔，檔名相同會彼此覆蓋，最後只存到 1 個 `bios` 檔案
 - 因此 curl 開發者也考慮到此情況，所以 URL 匹配語法支援輸出變數，可改寫為
 ```bash=
-# 檔名的 `#1` 對應第 1 個 globbing `[1-3]`
-# 檔名的 `#2` 對應第 2 個 globbing `[1-10]`
+# 檔名的 `#1` 對應第 1 個匹配語法 `[1-3]`
+# 檔名的 `#2` 對應第 2 個匹配語法 `[1-10]`
 curl -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.50.#1.#2.bios.conf'
 ```
 
@@ -64,7 +64,9 @@ curl -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.5
 - 採用 `--parallel` 一次進行 10 個並行連線，此時指令為
 
 ```bash=
-curl --parallel --parallel-immediate --parallel-max 10 -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.50.#1.#2.bios.conf'
+curl --parallel --parallel-immediate --parallel-max 10 \
+     -sku usr:pw \
+     'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.50.#1.#2.bios.conf'
 ```
 
 ### 取得回應資訊
@@ -90,12 +92,12 @@ code 000 url https://10.50.3.3/redfish/v1/Systems/1/bios
 
 ### 讓 curl 更可靠
 
-- 安全性: 上述例子透過 `-u` 後面加 `usr:pw` 指定帳號密碼，這種方式在 linux 系統上是非常不安全的行為，若你使用的電腦為多人登入使用，此時其他用戶下 `ps -ef|grep curl` 之類指令，即可看到你使用 curl 指定的參數(當然包含密碼)。此時務必參閱 curl [`--config`](https://everything.curl.dev/cmdline/configfile) 方式，至少把密碼包在檔案特定檔案
+- 安全性: 上述例子透過 `-u` 後面加 `usr:pw` 指定帳號密碼，這種方式在 linux 系統上是非常不安全的行為，若你使用的電腦為多人登入使用，此時其他用戶下 `ps -ef | grep curl` 之類指令，即可看到你使用 curl 指定的參數(當然包含密碼)。此時務必參閱 curl [`--config`](https://everything.curl.dev/cmdline/configfile) 方式，至少把密碼包在特定檔案
 - 可靠性: 若需要透過 curl 指令提供穩定的服務，那勢必要考慮錯誤處理，當 timeout 或 fail 等不符合預期的回傳值，要怎麼處理。此時可以參考 [manpage](https://curl.se/docs/manpage.html) 關於 `retry` or `fail` 等關鍵字的 option，依據你的情況做適當處理。當然最快方式參考 github 上其他大神們腳本
 
 ## 後記
 
-- curl 是系統管理老朋友，但以驚人速度持續更新，開發者在 7.66 release 的 [ blog 畫這張圖](https://daniel.haxx.se/blog/2019/09/11/curl-7-66-0-the-parallel-http-3-future-is-here/)，來表明 curl 功能以指數成長。在不久將來，我們勢必還可以期待，來自這位老朋友的新消息 :)
+- curl 是系統管理老朋友，近年以驚人速度持續更新，開發者在 7.66 release 的 [ blog 畫這張圖](https://daniel.haxx.se/blog/2019/09/11/curl-7-66-0-the-parallel-http-3-future-is-here/)，來表明 curl 更新次數以指數成長。勢必還可以期待，不久將來，來自這位老朋友的新消息 :)
 ![](https://i.imgur.com/KTFofnW.png =x300)
 
 
@@ -105,5 +107,8 @@ code 000 url https://10.50.3.3/redfish/v1/Systems/1/bios
 [curl 的 globbing 範例](https://unix.stackexchange.com/a/91574): stackoverflow 網友的範例  
 [curl 的 parallel 範例](https://stackoverflow.com/a/71967814): stackoverflow 網友的範例  
 
+---
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
 
-
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
