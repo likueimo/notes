@@ -2,25 +2,27 @@
 tags: notes, timer, systemd
 ---
 
-# 使用 systemd 取代 crontab
-- 現代主流的 Linux 作業系統 (CentOS、Ubuntu 等) ，預設皆使用到 systemd 做系統控制
-- systemd timer 可取代 crontab，較易 debug 和操作，推薦重要的工作可以花時間改寫
-- 為了避免文章過於複雜，簡化或省略部分功能描述
+# 使用 systemd timer 取代 crontab
+- 現代主流的 Linux 系統，預設使用 systemd 做系統管理
+- systemd timer 可取代 crontab，較易 debug 和操作，重要的工作推薦花時間改寫
+- 避免文章過於複雜，簡化或省略詳細的功能描述
 - 本文假設用戶有 root 權限
 - 本文連結 : https://hackmd.io/@kmo/notes_systemd_timer
 
-## systemd timer 好處
+## systemd timer 優點
 ::: spoiler 
-- 除了較容易 debug 之外，個人欣賞 systemd timer 好處，當上一時間步 cron job 還在執行，下一時間步到了也不會重複執行，避免同時執行系統卡死
-- 舉例來說，每 5 分鐘執行一次腳本，若上一個 5 分鐘的腳本還在執行，下一個 5 分鐘到了，他判斷 `*.service` 還在`activating`，也不會再啟動一次 `*.service` 
-- 提及一個較少人注意功能，systemd timer 可精確到秒，以秒執行，而 crontab 較難以實現。比如 30 秒執行一次腳本， systemd timer 可輕易實現
-- 可透過 `.service` 承接 Linux 的功能，比如限制使用的 CPU 和記憶體等，不過這是當你成為進階用戶再慢慢摸索
+- 較容易 debug
+- 當上一時間步 `foo.service` 還處於 `activating` 狀態，下一時間步到了也不會重複執行 `foo.service`，可以避免重複執行造成 process 壘加，導致系統異常
+  - 舉例來說:
+  每 5 分鐘執行一次 `foo.service`，當 09 點 10 分到了，結果 09 點 05 分的 `foo.service` 還在執行中，他判斷 `foo.service` 處於`activating` 狀態，就不會啟動 `foo.service`  
+- systemd timer 可精確到秒，以秒執行，而 crontab 較難以實現。比如 30 秒執行一次腳本，使用 systemd timer 可輕易實現
+- 可透過 `foo.service` 承接 Linux 的功能，比如限制使用的 CPU 和記憶體等
 :::
 
-## systemd timer 壞處
+## systemd timer 缺點
 ::: spoiler 
 - 相對於 crontab，使用 systemd timer 需要撰寫 2 個檔案
-- 學習曲線相對高，且需要對 Linux 系統相對高的熟悉度，才會比較好操作或理解
+- 學習曲線相對高。需要對 Linux 系統較高的熟悉度，才會較好理解，也比較不容易出錯
 :::
 
 ## systemd 基本介紹
@@ -37,10 +39,10 @@ tags: notes, timer, systemd
 - systemctl 基本指令
 ```bash=
 # 立即執行 or 停止指定的 service
-systemctl start/stop foo.service
+systemctl {start,stop} foo.service
 
 # 啟用 or 取消開機時會自動執行指定的 service
-systemctl enable/disable foo.service
+systemctl {enable,disable} foo.service
 
 # 重啟指定的 service
 systemctl restart foo.service
@@ -68,8 +70,8 @@ systemctl status foo.service
 ### 撰寫 systemd 的檔案
 ::: spoiler 
 - 分別撰寫 2 個檔案，`foo.service` 和 `foo.timer` 放底下指定路徑 
-- service 功能 : 定義執行什麼工作
-- timer 功能 : 定義何時執行
+- service 功能 : 定義執行什麼工作 (what)
+- timer 功能 : 定義何時執行 (when)
 - `/etc/systemd/system/foo.service`
 ```bash=
 [Service]
@@ -100,6 +102,7 @@ systemctl daemon-reload
 ::: spoiler
 - `/etc/systemd/system/foo.service`
 ```bash=
+Type=oneshot #oneshot 是指執行一次
 ExecStart=/opt/foo.sh #這邊指定你要執行的腳本路徑，權限要可執行
 ```
 
@@ -140,20 +143,17 @@ systemctl enable foo.timer
 
 ## 後記
 ::: spoiler 
-- 由於沒有詳盡到每個參數解釋，網路上也已經有很多不同詳細中文/英文資料說明 systemd，當有不懂推薦可以先 google 關鍵字查看看 ^^
+- 由於沒有詳盡到每個參數解釋，網路上也已經有很多不同詳細中文/英文資料說明 systemd，當有不懂推薦可以先 google 關鍵字查看看 :)
 :::
 
 
-## ref
+## 參考連結
 ::: spoiler 
-- https://askubuntu.com/a/1083647
-- https://wiki.archlinux.org/title/systemd
-- https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+- [ ubuntu 論壇網友回覆](https://askubuntu.com/a/1083647): 本文參考此網友說明的概念
+- [arch linux 的 wiki](https://wiki.archlinux.org/title/systemd): 針對 systemd 說明的非常簡潔清楚
+- [systemd unit 的官方文件](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
+- [systemd timer 的官方文件](https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
 :::
-
 
 ---
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa] This work is licensed under a [CC BY-NC-SA 4.0][cc-by-nc-sa]
-
-[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
+{%hackmd @kmo/widget_license %}
