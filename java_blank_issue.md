@@ -4,7 +4,7 @@ tags: notes, issue, java, Java Web Start, Remote Desktop, win10
 
 # 使用遠端桌面，開啟 Java 應用程式呈現空白
 
-> 最近使用 `Chrome Remote Desktop` 連到遠端的 win10 電腦，此時在遠端的電腦，開啟底下 Java Web Start 的應用程式，會呈現全白。而實際坐在該電腦前操作，開啟一樣的應用程式，可以正常開啟。此問題苦惱許久，最近終於解決了
+> 最近使用 `Chrome Remote Desktop` 連到遠端的 win10 電腦，開啟遠端 win10 底下 Java Web Start 應用程式，會呈現全白。而實際坐在該電腦前操作，開啟一樣的應用程式，可以正常開啟。此問題苦惱許久，最近終於解決了
 ::: warning
 本文連結: https://hackmd.io/@kmo/java_blank_issue  
 任何回饋歡迎留言在此篇 hackmd :)  
@@ -95,8 +95,8 @@ J2D_D3D=false
 :::
 
 ## 詳述解法
-- [腳本來自 2009 年文章](https://www.techsupportforum.com/threads/shortcut-batch-file-code-to-disable-direct-draw-acceleration.437584/post-2493259)，主要是切換 `DirectDraw 加速` 和 `Direct3D 加速`，從為 `已啟用` 變成 `已停用`
-- 執行前開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，預設應該都是`已啟用`狀態
+- [腳本來自 2009 年文章，網友 TheOutcaste 的回覆](https://www.techsupportforum.com/threads/shortcut-batch-file-code-to-disable-direct-draw-acceleration.437584/post-2493259)，主要是切換遠端 win10 系統的 `DirectDraw 加速` 和 `Direct3D 加速`，從 `已啟用` 變成 `已停用`
+- 執行前開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，預設應是`已啟用` 狀態
 - 原始腳本
 ```shell=
 @Echo Off
@@ -107,7 +107,7 @@ If /I "%~1"=="Enable" Set _Mode=0
 Reg Add HKLM\SOFTWARE\Microsoft\DirectDraw /V EmulationOnly /T REG_DWORD /D %_Mode% /F
 Reg Add HKLM\SOFTWARE\Microsoft\Direct3D\Drivers /V SoftwareOnly /T REG_DWORD /D %_Mode% /F
 ```
-- 實際使用的腳本，用記事本存檔 `script.cmd`，使用系統管理員權限執行 `script.cmd` 即可
+- 實際使用的腳本(修改自上述腳本)，用記事本存檔成 `script.cmd`，使用系統管理員權限執行 `script.cmd` 即可
 ```shell=
 @Echo Off
 ::Set Mode=1 to Disable, Mode=0 to Enable as the default if nothing specified on the command line.
@@ -115,7 +115,10 @@ Set _Mode=1
 Reg Add HKLM\SOFTWARE\Microsoft\DirectDraw /V EmulationOnly /T REG_DWORD /D %_Mode% /F
 Reg Add HKLM\SOFTWARE\Microsoft\Direct3D\Drivers /V SoftwareOnly /T REG_DWORD /D %_Mode% /F
 ```
-- 執行後開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，預設應該都是`已停用`狀態
+- 執行後開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，應改為`已停用` 狀態
+![](https://i.imgur.com/jceKo4H.png)
+- 由於筆電為工作用途，並無顯卡及遊戲需求，不太確定停用是否有效能差異
+- 若修改完有任何異常情況，只需要回到腳本，設定 `Set _Mode=0` 再執行一次即可恢復
 
 ---
 {%hackmd @kmo/widget_license %}
