@@ -10,7 +10,7 @@ tags: notes, bash, tool, cli, curl
 
 ::: warning
 本篇撰文者為系統管理員，測試環境為 Bash 搭配 curl `7.84.0`  
-透過 server 的 BMC 提供的 redfish api (類似 restful api)，演示 `--parallel` 功能  
+透過 server 的 BMC 提供的 redfish api (類似 restful api)，演示 curl 的 `--parallel` 功能  
 本文連結: https://hackmd.io/@kmo/curl_parallel  
 任何回饋歡迎留言在此篇 hackmd :)  
 :::
@@ -19,10 +19,7 @@ tags: notes, bash, tool, cli, curl
 
 ::: info
 :scroll: 情境說明
-- 管理的 server 分 3 個群組，每個群組有 10 台電腦，共 30 台電腦
-- 現代 server 的 BMC 服務，幾乎都有提供 redfish api (類似 restful api)
-- 使用 redfish api，備份 server 的 BIOS 設定檔
-
+- 管理的 server 分 3 個群組，每群有 10 台電腦，共 30 台電腦
 ```bash=
 # 群組 1 的電腦 IP 範圍
 10.50.1.[1-10] (也就是 10.50.1.1, 10.50.1.2, 10.50.1.3, ..., 10.50.1.9, 10.50.1.10)
@@ -31,14 +28,24 @@ tags: notes, bash, tool, cli, curl
 # 群組 3 的電腦 IP 範圍
 10.50.3.[1-10] (也就是 10.50.3.1, 10.50.3.2, 10.50.3.3, ..., 10.50.3.9, 10.50.3.10)
 ```
-- 透過 api 取得單 1 台電腦 BIOS 設定，並存成檔案，以 `10.50.1.1` 為例
+- 現代 server 的 BMC 服務，幾乎都有提供 redfish api (類似 restful api)
+- 使用 curl 指令，透過 api 取得單 1 台電腦 BIOS 設定，並存成檔案  
+  以 IP 為 `10.50.1.1` 的 server 為例  
 ```bash=
+# 不同硬體廠牌的 api 都略有差異
+# 實際應用務必查詢自己機器的 redfish 說明文件，或是詢問硬體 vendor
 curl -sku usr:pw 'https://10.50.1.1/redfish/v1/Systems/1/bios' -o 10.50.1.1.bios.conf
 ```
-- ps: 不同硬體廠牌的 api 都略有差異，實際應用務必查詢自己機器的 redfish 說明文件，或是詢問硬體 vendor
+
 :::
-### 直觀解法
-- 此題直觀方法，就是透過 nested loop 完成
+
+::: warning
+:dart: 問題
+- 請使用上述 curl 指令範例，備份 30 台 server 的 BIOS 設定檔
+:::
+
+### 1. Bash 的 nested loop
+- 此題直觀解法，就是透過 bash 腳本的 nested loop 完成
 ```bash=
 #!/bin/bash
 
@@ -48,30 +55,30 @@ for ii in {1..3}; do
   done
 done
 ```
-- 但此方法效率不夠好，實際執行約花 `47` 秒完成 😴
+- 但此方法效率不夠好，實際測試約花 `47` 秒完成 😴
 
 
-### 匹配多個 URL
+### 2. 匹配多個 URL
 
-- 透過 curl 的 [匹配 URL 語法](https://everything.curl.dev/cmdline/globbing)(URL globbing)，可以一次匹配多個 URL 並執行 ，簡化上述腳本成為一行指令
+- 透過 curl 的 [匹配 URL 語法](https://everything.curl.dev/cmdline/globbing)(URL globbing)，可以一次匹配多個 URL 並執行 ，簡化上述 bash 腳本成為一行指令
 ```bash=
 curl -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios'
 ```
-- 題目希望把 bios 設定檔備份下來，但 URL 結尾名稱都是 `bios`，若使用 `-O, --remote-name` 直接存檔，檔名相同叫`bios`會彼此覆蓋，最後只存到 1 個 `bios` 檔案
+- 題目希望把 bios 設定檔備份下來，但 URL 結尾名稱都是 `bios`，若使用 `-O, --remote-name` 直接存檔，檔名相同(都叫 `bios`)會彼此覆蓋，最後只存到 1 個 `bios` 檔案
 - 因此 curl 開發者也考慮到此情況，所以 URL 匹配語法支援輸出變數，可改寫為
 ```bash=
 # 檔名的 `#1` 對應第 1 個匹配語法 `[1-3]`
 # 檔名的 `#2` 對應第 2 個匹配語法 `[1-10]`
 curl -sku usr:pw 'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.50.#1.#2.bios.conf'
 ```
-- 此時尚未並行化處理，但執行效率已經有改善，實際執行約花 `15` 秒完成 👌
+- 上述指令尚未使用並行化處理，但執行效率已經大幅改善，實際測試約花 `15` 秒完成 👌
 
-### 使用 `--parallel` 
+### 3. 使用 `--parallel` 
 
 ::: success
 - 當 request 的 URL 是不同來源，curl 開發者[建議可以使用 `--parallel` 並行化處理](https://everything.curl.dev/cmdline/urls/parallel)
 - 除此之外還有 2 個 option 可搭配使用
-  - `--parallel-immediate`: curl 會儘可能重複使用已建立的連線(multiplex)，可加速處理需求並減少負載，不過當 URL 是不同來源，那 multiplex 效果就不大。使用此選項會儘可能開啟新連線，把考慮 multiplex 的因子權重降低。本文的實例就很適合使用
+  - `--parallel-immediate`: curl 預設會儘可能重複使用已建立的連線(multiplex)，可加速處理需求並減少負載，不過當 URL 是不同來源，那 multiplex 效果就不大。使用此選項會把考慮 multiplex 的因子權重降低，儘可能開啟新連線。本文的實例就很適合使用
   - `--parallel-max`: 預設是 50 個並行工作，可以調整自己適用的情境
 :::
 
@@ -82,7 +89,17 @@ curl --parallel --parallel-immediate --parallel-max 30 \
      -sku usr:pw \
      'https://10.50.[1-3].[1-10]/redfish/v1/Systems/1/bios' -o '10.50.#1.#2.bios.conf'
 ```
-- 並行化處理後，此時執行測試僅花 `0.5` 秒完成 👏
+- 並行化處理後，實際測試僅花 `0.5` 秒完成 👏
+
+### 上述測試時間整理
+
+| 問題解法              | 實際測試 |
+| --------------------- | ------------ |
+| Bash 的 nested loop   | 47 秒        |
+| 匹配多個 URL (curl globbing) | 15 秒        |
+| 使用 curl 的 `--parallel`  | 0.5 秒       |
+
+
 ### 取得回應資訊
 - 當處理的 URL request 數量多，難免會遇到對方 server 忙碌或當機，此時需要取得回應資訊判斷。可以透過 `--write-out` 取得 http 的 `response_code`，並且搭配印出 `url` 對照。此時指令改為
 ```bash=
