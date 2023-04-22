@@ -1,5 +1,6 @@
 # 使用 IPMI 取得和變更 server 電源狀態
 - 使用 [`freeipmi`](https://www.gnu.org/software/freeipmi/) 套件提供的 `ipmi-power` 指令為範例
+- 文章中若是在 terminal 下，進行 Linux 指令操作，會在指令前加 `$` 
 - 本文環境: [WSL2](https://aka.ms/wsl2-install)(Ubuntu)，`freeipmi` 版本為 `1.6.4`
 - share link: https://hackmd.io/@kmo/ipmi-power
 ## 前置作業
@@ -8,10 +9,10 @@
   - 推薦被管理的 server 也都在 OS 上安裝
   ```bash=
   # Debian/Ubuntu 系列
-  apt install freeipmi-tools
+  $ apt install freeipmi-tools
   
   # RHEL/CentOS 系列
-  yum install freeipmi
+  $ yum install freeipmi
   ```
 - 設定 `/etc/freeipmi/freeipmi.conf`:  
   - 同 cluster 機器，通常 IPMI 帳號密碼會有相同一組  
