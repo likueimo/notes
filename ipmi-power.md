@@ -35,8 +35,6 @@
 
 - `ipmi-power` 常用的 option 
 
-
-
 | option(short) | option(long) | 說明                            |
 | ------------- | ------------ | ------------------------------- |
 | `-s`          | `--stat`     | Get power status                |
@@ -56,6 +54,7 @@
 | ------ | ------------------ |
 | 關機   | systemctl poweroff |
 | 重開機 | systemctl reboot   |
+
 :::
 
 ### Power status
