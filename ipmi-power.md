@@ -1,3 +1,9 @@
+---
+tags: notes, ipmi, freeipmi, cli, tool
+---
+
+###### tags:`ipmi` `freeipmi` `cli` `notes` 
+
 # 使用 IPMI 取得和變更 server 電源狀態
 - 使用 [`freeipmi`](https://www.gnu.org/software/freeipmi/) 套件提供的 `ipmi-power` 指令為範例
 - 文章中若是在 terminal 下，進行 Linux 指令操作，會在指令前加 `$` 
@@ -45,16 +51,16 @@
 | `-r`          | `--reset`    | Power 持續供應下重啟 OS         |
 | `-h`          | `--hostname` | 可用 IP 或 hostname 指定 server |
 
-- `--off`: 通常是正常關機卡住，才會用到 ipmi 關機。(正常 Linux 系統關機，是在 OS 下指令 `systemctl poweroff`)
+- `--off`: 通常是正常關機卡住，才會用到 IPMI 關機。(正常 Linux 系統關機，是在 OS 下指令 `systemctl poweroff`)
 - `--cycle` : 如果硬體有異常，或是 BMC(Baseboard Management Controller) 有當機情況，可以嘗試`--cycle`看能不能復原
 - `--reset` : 通常用在 OS 當機後需要重啟 OS。類似在舊款 Win 系統下 `Ctrl` + `Alt` + `Del` 重開機
 - `--hostname`: freeipmi 特色可指定連續 IP 或 hostname 範圍，可以參考下面範例
 - 補充說明: 主流 Linux 系統皆已採用 systemd，因此在 OS 正常關機和重開機指令如下
 
-| 說明   | 指令               |
-| ------ | ------------------ |
-| 關機   | systemctl poweroff |
-| 重開機 | systemctl reboot   |
+| 說明      | 指令               |
+| --------- | ------------------ |
+| OS 關機   | systemctl poweroff |
+| OS 重開機 | systemctl reboot   |
 
 :::
 
@@ -65,10 +71,10 @@
 :::
 
 ```bash=
-# 指定遠端 server 通常用 IP，而 freeipmi 特色，就是一次指定連續 IP 範圍
+# 指定遠端 server 通常用 IP，而 freeipmi 特色，就是能一次指定連續 IP 範圍
 $ ipmi-power -s -h 10.50.1.[1-3]
 
-# freeipmi 採用並行處理，所以輸出結果不會按順序排序，結果如下
+# freeipmi 採用並行(concurrency)處理，所以輸出結果不會按順序排序，結果如下
 # 看出 10.50.1.1 為 Power off 狀態，其他為 Power on 狀態
 10.50.1.2: on
 10.50.1.1: off
@@ -90,11 +96,13 @@ computer02-ipmi: on
 :::
 
 ```bash=
-# 下述指令都可以做到一樣事情
 # 為了確保 Power on，通常會一次指定範圍內節點，已經 Power on 狀態不受影響
+## 指定 IP
+$ ipmi-power --on -h 10.50.1.[1-3]
+## or 指定 hostname
 $ ipmi-power --on -h computer[01-03]-ipmi
 
-# 輸出結果如下，有正常回應指令就會顯示 ok
+# 指定 hostname 結果為例，輸出結果如下，有正常回應指令就會顯示 ok
 computer03-ipmi: ok
 computer01-ipmi: ok
 computer02-ipmi: ok
@@ -109,7 +117,7 @@ computer03 在 OS 正常關機(或是重開機)，但過了很久還是保持 Po
 ::: 
 ::: warning
 :dart: 目標
-- 使用 `ipmi-power`，強制關機(或是重開機)
+- 使用 `ipmi-power`，強制關機(或是重開機) computer03
 :::
 
 ```bash=
@@ -118,8 +126,9 @@ $ ipmi-power -s -h computer03-ipmi
 
 # 再利用 BMC 的 KVM console 的畫面確認
 # 確認卡在關機過程，此時強制關機或強制重開機
+## 強制關機
 $ ipmi-power --off -h computer03-ipmi
-## or
+## or 強制重開機
 $ ipmi-power --reset -h computer03-ipmi
 ```
 
@@ -129,7 +138,7 @@ $ ipmi-power --reset -h computer03-ipmi
 computer03 的 BMC 當機，使用遠端 IPMI 指令都沒反應  
 幸運的是，還能進去 computer03 的 OS，在 OS 下 IPMI 指令還有反應  
 
-正常 SOP 會是在 OS 用 IPMI 指令，對 BMC 做 cold reset，大部份就會正常  
+ps: 正常 SOP 會是在 OS 用 IPMI 指令，對 BMC 做 cold reset，大部份就會正常  
 而少數異常需要做到 Power cycle 才正常  
 用 Power cycle 去試著修復 BMC 當機，比較像是民俗療法，碰碰運氣看看  
 :::
@@ -142,10 +151,16 @@ computer03 的 BMC 當機，使用遠端 IPMI 指令都沒反應
 
 ```bash=
 # 進到 computer03 的 OS
-$ ssh computer03
-
 # 在 computer03 的 OS 下已經裝好 freeipmi
-# 使用尚未提到 bmc-device 指令，進行 BMC cold reset
+# 提醒在 OS 使用 IPMI 指令，通常需要取得 root 權限
+$ ssh root@computer03
+
+# 用 bmc-info 指令，測試在 computer03 的 OS 下，IPMI 還有沒有反應
+# 若下此指令沒有卡住，正常顯示資訊，就代表在 OS 下還能聯繫到 IPMI 
+$ bmc-info
+
+# 使用 bmc-device 指令，進行 BMC cold reset
+# 大部 BMC 異常，通常此指令就可以修復
 $ bmc-device --cold-reset
 
 # 上述指令等待 3 分鐘後，遠端 IPMI 還是沒反應
