@@ -5,8 +5,8 @@
 ::: warning
 :warning: EDAC 競爭
 - EDAC 會輪巡(poll)暫存器(register)，當讀到記憶體錯誤，會嘗試修正並"清除"紀錄
-- 伺服器記憶體出現 CE(correctable errors) 紀錄，是非常常見的現象，且大部分不需要擔心。但如果相同的記憶體，不斷出現 CE 紀錄，通常也代表快要壞掉的徵兆
-- BMC 系統可能和 Linux 作業系統，產生 EDAC 競爭。先讀到錯誤記憶體的一方，就會嘗試修復並清除紀錄，造成 2 邊都沒有完整的錯誤紀錄
+- 伺服器記憶體出現 CE(correctable errors) 紀錄，是非常常見的現象，且大部分不需要擔心。但如果相同的記憶體，不斷出現 CE 紀錄，通常也代表快要壞掉的徵兆。比如 [Intel 認為](https://www.intel.com/content/www/us/en/support/articles/000024007/server-products.html) 24 小時內，出現超過 10 筆 CE，就是可以更換的標準 
+- BMC 系統可能和 Linux 作業系統，產生 EDAC 競爭 - 比賽誰先讀到錯誤記憶體。先讀到錯誤記憶體的一方，就會嘗試修復並清除紀錄，造成 2 邊可能都沒有完整的 CE 錯誤紀錄
 - 大部分伺服器硬體供應商，通常僅依據 BMC 日誌的錯誤訊息，判斷是否要進行硬體更換
 :::
 
@@ -45,7 +45,7 @@ grubby --update-kernel=DEFAULT --remove-args='mce=ignore_ce modprobe.blacklist=x
 ```
 
 ## 還可以做更多 - 作業系統啟用 `rasdaemon` 和 `ipmiseld`
-- Rasdaemon is a RAS (Reliability, Availability and Serviceability) logging tool。  
+- Rasdaemon is a RAS (Reliability, Availability and Serviceability) logging tool  
   其中 `rasdaemon` 已經取代以前 `mcelog`   
   [RHEL7: Which of mcelog and rasdaemon should I use for monitoring of hardware, for which usecases?](https://access.redhat.com/solutions/1412953)
 - Twitter 維運數十萬台伺服器經驗，在文章推薦大家啟用 `rasdaemon`，可以有一致方式收集硬體相關錯誤訊息  
@@ -67,6 +67,8 @@ grubby --update-kernel=DEFAULT --remove-args='mce=ignore_ce modprobe.blacklist=x
   - [Notice: (Revision) Linux - To Ensure Efficient Firmware First Handling of Memory Failures HPE Recommends Booting With the mce=ignore_ce Boot Parameter in Addition to Disabling EDAC](https://support.hpe.com/hpesc/public/docDisplay?docId=emr_na-a00016026en_us)
 - Dell
   - [EDAC Errors in 'messages' Log in RedHat Enterprise Linux (RHEL) and PowerEdge](https://www.dell.com/support/kbdoc/en-us/000177028)
+- Oracle
+  - https://docs.oracle.com/en/servers/management/hardware-management-pack/2.4/installation-guide/install-required-linux-components-installing-oracle-linux-fma-software.html
 - IBM
   - [Linux EDAC reports memory errors - IBM BladeCenter and System x](https://www.ibm.com/support/pages/node/853252)
 - Redhat  
@@ -98,10 +100,10 @@ mce=ignore_ce
 
 Linux 系統維運工作 5 年，經手過 1000 台左右實體伺服器。其中一部分是國產伺服器，一部分是國外品牌伺服器。相關 EDAC 議題國外品牌伺服器，都有說明和對應處理方式。可惜國產伺服器廠，似乎還沒有類似公開說明文件。本文角度主要以追求穩定的系統維運，若以效能角度，系統關掉 EDAC 也有效能方面改善，比如 Redhat 文件提及可以改善反應時間 ([5.2. Improving response times by disabling error detection and correction units](https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux_for_real_time/9/html/optimizing_rhel_9_for_real_time_for_low_latency_operation/setting-bios-parameters-for-system-tuning_optimizing-rhel9-for-real-time-for-low-latency-operation#proc_configuring-edac-units_setting-bios-parameters-for-system-tuning))
 
-相關議題還有 BIOS 的 `Memory scrubbing` 設定，為了系統穩定通常預設開啟，但開啟就會影響些微效能，通常國外品牌廠都會有 BIOS 文件指引，看你使用情境作不同建議和調整。甚至如果是 HPC 等非常大 scale 的 cluster，也有文章討論頻繁 CE 會影響效能的討論 ([Understanding the Effects of DRAM Correctable
+相關效能議題還有 BIOS 的 `Memory scrubbing` 設定，為了系統穩定通常預設開啟，但開啟就會影響些微效能，通常國外品牌廠都會有 BIOS 文件指引，看你使用情境作不同建議和調整。甚至像 HPC 等非常大 scale 的 cluster，近期也有 paper 討論，頻繁 CE 對效能的影響 ([Understanding the Effects of DRAM Correctable
 Error Logging at Scale](https://www.osti.gov/servlets/purl/1881688))
 
-我們身處高速變化時代，上述文章可能很快就過時，也歡迎大家不吝給予建議!
+我們身處高速變化時代，上述文章可能很快就需要修正，也歡迎大家不吝給予建議!
 
 ---
 {%hackmd @kmo/widget_license %}
