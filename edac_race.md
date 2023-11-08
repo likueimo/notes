@@ -5,14 +5,14 @@
 ::: warning
 :warning: EDAC 競爭
 - EDAC 會輪巡(poll)暫存器(register)，當讀到記憶體錯誤，會嘗試修正並"清除"紀錄
-- 伺服器記憶體出現 CE(correctable errors) 紀錄，是非常常見的現象，且大部分不需要擔心。但如果相同的記憶體，不斷出現 CE 紀錄，通常也代表快要壞掉的徵兆。比如 [Intel 認為](https://www.intel.com/content/www/us/en/support/articles/000024007/server-products.html) 24 小時內，出現超過 10 筆 CE，就是可以更換的標準 
-- BMC 系統可能和 Linux 作業系統，產生 EDAC 競爭 - 比賽誰先讀到錯誤記憶體。先讀到錯誤記憶體的一方，就會嘗試修復並清除紀錄，造成 2 邊可能都沒有完整的 CE 錯誤紀錄
+- 伺服器記憶體出現 CE(correctable errors) 紀錄，是非常常見的現象，且大部分不需要擔心。但如果相同的記憶體，不斷出現 CE 紀錄，通常也代表快要壞掉的徵兆。比如 [Intel 認為](https://www.intel.com/content/www/us/en/support/articles/000024007/server-products.html) 24 小時內，出現超過 10 筆 CE，代表可能 slowly failing ，可以考慮更換 
+- 獨立的 BMC 系統和 Linux 作業系統，皆有 EDAC 功能，當發生記憶體錯誤，就會比賽誰先讀到錯誤的記憶體。先讀到的一方，就會嘗試修復並清除紀錄。由於無法保證誰先讀到錯誤，造成 2 邊都沒有完整的 CE 錯誤紀錄，無法收集正確的 CE 數量，來判斷是否需要更換記憶體。我把這種現象稱為「EDAC 競爭(race)」
 - 大部分伺服器硬體供應商，通常僅依據 BMC 日誌的錯誤訊息，判斷是否要進行硬體更換
 :::
 
 ::: info
 :mag_right: 為了避免 EDAC 競爭產生的問題
-- 通常伺服器供應商，會建議在 Linux 系統裡，禁用 EDAC 相關設定。僅讓 BMC 進行記憶體錯誤修正，讓 BMC 日誌收集完整錯誤紀錄
+- 通常伺服器供應商，會建議在 Linux 系統裡，禁用 EDAC 相關設定。僅讓 BMC 進行記憶體錯誤修正，讓 BMC 日誌(SEL)收集完整 CE 錯誤紀錄
 ::: 
 
 ## 操作範例
@@ -40,6 +40,9 @@ grubby --info=DEFAULT
 # 重開機就會生效
 systemctl reboot
 
+# 這時候檢查 kernel module，就不會有任何 EDAC 相關 module
+lsmod | grep -i edac
+
 # 若需要移除新增的參數，可以進行以下操作，最後再重開機
 grubby --update-kernel=DEFAULT --remove-args='mce=ignore_ce modprobe.blacklist=xxx_edac'
 ```
@@ -57,7 +60,7 @@ grubby --update-kernel=DEFAULT --remove-args='mce=ignore_ce modprobe.blacklist=x
 ## 各家廠商和相關說明文章
 - ION Computer
   - [Linux EDAC modules on Server Systems](https://blog.ioncomputer.com/2019/05/06/linux-edac-modules-on-server-systems)
-  - 美國 ION 伺服器廠商，在部落格深入淺出描述此議題，可能是目前網路上最清楚一篇。非常推薦大家閱讀。
+  - 美國 ION 伺服器廠商，在部落格深入淺出描述此議題，可能是目前網路上最清楚一篇。非常推薦大家閱讀！
 - Lenovo
   - [Special consideration when using Linux error detection and correction (EDAC) for tracking memory errors - Lenovo Server](https://support.lenovo.com/us/en/solutions/ht107942)  
 - Fujitsu
@@ -80,6 +83,7 @@ grubby --update-kernel=DEFAULT --remove-args='mce=ignore_ce modprobe.blacklist=x
     10 年前就有類似的議題
 - SUSE
   - [Considerations for dealing with correctable memory error messages](https://www.suse.com/support/kb/doc/?id=000019052)
+  - [mce EDAC memory scrubbing error](https://www.suse.com/support/kb/doc/?id=000020932)
 - SAP on Azure
   - https://learn.microsoft.com/en-us/azure/sap/large-instances/os-upgrade-hana-large-instance
 - stackexchange 網友類似議題詢問
@@ -98,7 +102,7 @@ mce=ignore_ce
 
 ## 後記
 
-Linux 系統維運工作 5 年，經手過 1000 台左右實體伺服器。其中一部分是國產伺服器，一部分是國外品牌伺服器。相關 EDAC 議題國外品牌伺服器，都有說明和對應處理方式。可惜國產伺服器廠，似乎還沒有類似公開說明文件。本文角度主要以追求穩定的系統維運，若以效能角度，系統關掉 EDAC 也有效能方面改善，比如 Redhat 文件提及可以改善反應時間 ([5.2. Improving response times by disabling error detection and correction units](https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux_for_real_time/9/html/optimizing_rhel_9_for_real_time_for_low_latency_operation/setting-bios-parameters-for-system-tuning_optimizing-rhel9-for-real-time-for-low-latency-operation#proc_configuring-edac-units_setting-bios-parameters-for-system-tuning))
+Linux 系統維運工作 5 年，經手過 1000 台左右實體伺服器。其中一部分是國產伺服器，一部分是國外品牌伺服器。相關 EDAC 議題國外品牌伺服器，都有說明和對應處理方式。可惜國產伺服器廠，似乎還沒有類似公開說明文件。本文角度主要以追求穩定的系統維運，若以效能角度，整體關掉 EDAC 也有效能方面改善，比如 Redhat 文件提及可以改善反應時間 ([5.2. Improving response times by disabling error detection and correction units](https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux_for_real_time/9/html/optimizing_rhel_9_for_real_time_for_low_latency_operation/setting-bios-parameters-for-system-tuning_optimizing-rhel9-for-real-time-for-low-latency-operation#proc_configuring-edac-units_setting-bios-parameters-for-system-tuning))
 
 相關效能議題還有 BIOS 的 `Memory scrubbing` 設定，為了系統穩定通常預設開啟，但開啟就會影響些微效能，通常國外品牌廠都會有 BIOS 文件指引，看你使用情境作不同建議和調整。甚至像 HPC 等非常大 scale 的 cluster，近期也有 paper 討論，頻繁 CE 對效能的影響 ([Understanding the Effects of DRAM Correctable
 Error Logging at Scale](https://www.osti.gov/servlets/purl/1881688))
