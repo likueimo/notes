@@ -1,27 +1,35 @@
----
-tags: notes, issue, java, Java Web Start, Remote Desktop, win10 
----
+# 遠端桌面下，開啟 Java Web Start (*.jnlp) 呈現空白
 
-# 使用遠端桌面，開啟 Java 應用程式呈現空白
-
-> 最近使用 `Chrome Remote Desktop` 連到遠端的 win10 電腦，開啟遠端 win10 底下 Java Web Start 應用程式，會呈現全白。而實際坐在該電腦前操作，開啟一樣的應用程式，可以正常開啟。此問題苦惱許久，最近終於解決了
-::: warning
+> 最近接手舊的專案，用到`Java Web Start 應用程式(*.jnlp)`。而連到遠端電腦，開啟遠端 win10 底下 `Java Web Start 應用程式`，卻呈現全白。而實際坐在該電腦前操作，可以正常開啟並顯示。此問題苦惱許久，最近終於解決了  
 本文連結: https://hackmd.io/@kmo/java_blank_issue  
-任何回饋歡迎留言在此篇 hackmd :)  
+
+::: info 
+- [Java Web Start 應用程式](https://en.wikipedia.org/wiki/Java_Web_Start) 為已經淘汰的技術，通常只有舊專案才有可能碰到  
+- 本文為紀錄遇到此問題，解決思路和解法
 ::: 
-## 關鍵字搜尋
-- 由於是使用 `Chrome Remote Desktop` 發生的，所以會習慣帶入應用程式名稱，並且加上 issue 情況去搜尋
+
+## 問題簡述
+
+
+| 情境             | 狀態                   |
+| ---------------- | ---------------------- |
+| win10 電腦前     | 開啟 `*.jnlp` 正常顯示 |
+| 遠端桌面到 win10 | 開啟 `*.jnlp` 呈現空白 |
+
+
+## 問題關鍵字搜尋
+- 由於是使用 `Chrome Remote Desktop` 發生的，習慣帶應用程式名稱，並添加異常情況去搜尋
 
 ```bash=
 Chrome Remote Desktop Java blank
 ```
 - 此時`Remote Desktop` 剛好是一個通用詞彙，幸運在 teamviewer 的社群看到類似問題討論，並且持續討論 3 年以上。之所以判斷 teamviewer 討論也適用，是因為此現象看起來都和 Java 應用程式有關，並且觀察其他搜尋結果，不同遠端程式都有類似 issue
 - [Some applications does not show content (white window) Windows 10 host](https://community.teamviewer.com/English/discussion/10718/some-applications-does-not-show-content-white-window-windows-10-host)
-![](https://i.imgur.com/OK2jROn.png)
+![](https://i.postimg.cc/tJb6fwNw/image.png =70%x)
 
 ## 測試解法
-- 該文底下有網友，仿小論文格式討論各種解法，針對 Java 環境變數測試都失敗，最後是針對 win10 DXDiag 相關硬體加速設定關閉，即可修正
-![](https://i.imgur.com/RY5eV4E.png)
+- 該文底下網友 `@mattmill30`，測試各種解法，比如測試 Java 環境變數都失敗，最後是針對 win10 的 DXDiag 硬體加速設定關閉，即可修正
+![](https://i.postimg.cc/nhr309z7/image.png =70%x)
 
 ::: spoiler 網友 @mattmill30 回覆完整內容
 This answer expands upon @Julia's, second point 'Window contents that are drawn hardware-accelerated (e.g. browser content or 3D applications / games) are no longer drawn (you cannot see the application)'.
@@ -97,18 +105,8 @@ J2D_D3D=false
 ## 詳述解法
 - [腳本來自 2009 年文章，網友 TheOutcaste 的回覆](https://www.techsupportforum.com/threads/shortcut-batch-file-code-to-disable-direct-draw-acceleration.437584/post-2493259)，主要是切換遠端 win10 系統的 `DirectDraw 加速` 和 `Direct3D 加速`，從 `已啟用` 變成 `已停用`
 - 執行前開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，預設應是`已啟用` 狀態
-- 原始腳本
-```shell=
-@Echo Off
-::Set Mode=1 to Disable, Mode=0 to Enable as the default if nothing specified on the command line.
-Set _Mode=0
-If /I "%~1"=="Disable" Set _Mode=1
-If /I "%~1"=="Enable" Set _Mode=0
-Reg Add HKLM\SOFTWARE\Microsoft\DirectDraw /V EmulationOnly /T REG_DWORD /D %_Mode% /F
-Reg Add HKLM\SOFTWARE\Microsoft\Direct3D\Drivers /V SoftwareOnly /T REG_DWORD /D %_Mode% /F
-```
-- 實際使用的腳本(修改自上述腳本)，用記事本存檔成 `script.cmd`，使用系統管理員權限執行 `script.cmd` 即可
-```shell=
+- 修改自上述腳本，用記事本存檔成 `script.cmd`，使用系統管理員權限執行 `script.cmd` 即可
+```powershell=
 @Echo Off
 ::Set Mode=1 to Disable, Mode=0 to Enable as the default if nothing specified on the command line.
 Set _Mode=1
@@ -116,9 +114,10 @@ Reg Add HKLM\SOFTWARE\Microsoft\DirectDraw /V EmulationOnly /T REG_DWORD /D %_Mo
 Reg Add HKLM\SOFTWARE\Microsoft\Direct3D\Drivers /V SoftwareOnly /T REG_DWORD /D %_Mode% /F
 ```
 - 執行後開啟 `dxdiag.exe` 檢查，點選`顯示`，看到 `DirectX 功能`地方，應改為`已停用` 狀態
-![](https://i.imgur.com/jceKo4H.png)
-- 由於筆電為工作用途，並無顯卡及遊戲需求，不太確定停用是否有效能差異
+![](https://i.postimg.cc/TwfmNB9S/dxd.png =90%x)
+::: warning
+- 測試筆電為工作用途，並無顯卡及遊戲需求，停用後並無明顯效能差異，但不確定其他情境停用是否有效能差異
 - 若修改完有任何異常情況，只需要回到腳本，設定 `Set _Mode=0` 再執行一次即可恢復
-
+:::
 ---
 {%hackmd @kmo/widget_license %}
