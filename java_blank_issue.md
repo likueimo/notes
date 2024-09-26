@@ -18,7 +18,7 @@
 
 
 ## 問題關鍵字搜尋
-- 由於是使用 `Chrome Remote Desktop` 發生的，習慣帶應用程式名稱，並添加異常情況去搜尋
+- 由於是使用 [Chrome Remote Desktop](https://remotedesktop.google.com) 發生的，習慣帶應用程式名稱，並添加異常情況去搜尋
 
 ```bash=
 Chrome Remote Desktop Java blank
@@ -31,7 +31,7 @@ Chrome Remote Desktop Java blank
 - 該文底下網友 `@mattmill30`，測試各種解法，比如測試 Java 環境變數都失敗，最後是針對 win10 的 DXDiag 硬體加速設定關閉，即可修正
 ![](https://i.postimg.cc/nhr309z7/image.png =70%x)
 
-::: spoiler 網友 @mattmill30 回覆完整內容
+::: spoiler 網友 `@mattmill30` 回覆完整內容
 This answer expands upon @Julia's, second point 'Window contents that are drawn hardware-accelerated (e.g. browser content or 3D applications / games) are no longer drawn (you cannot see the application)'.
 
 See 'Solution' below.
@@ -98,8 +98,6 @@ J2D_D3D=false
 - [Disable DirectDraw and Direct3D acceleration on Windows 8](https://superuser.com/questions/495303/how-do-i-disable-directdraw-and-direct3d-acceleration-on-windows-8)
   - [Guide for directx.cpl - changes 32-bit DirectDraw and Direct3D, but not 64-bit (dxdiag 32/64-bit)](https://superuser.com/a/504510)
   - [DirectDraw and Direct3D registry entries](https://superuser.com/a/496775)
-
-
 :::
 
 ## 詳述解法
