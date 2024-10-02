@@ -1,11 +1,11 @@
-# 遠端桌面下，開啟 .jnlp 應用程式呈現空白
+# 遠端桌面下，開啟 Java 應用程式(.jnlp)呈現空白
 
-> 最近接手舊的專案，用到`Java Web Start 應用程式(.jnlp)`。而連到遠端電腦，執行遠端 win10 底下的 .jnlp 應用程式，卻呈現全白。而實際坐在該電腦前操作，可以正常執行和顯示畫面。此問題苦惱許久，最近終於解決了  
+> 最近接手舊的專案，用到`Java Web Start 應用程式(.jnlp)`。而當在外地出差，連線到遠端電腦，當執行遠端 win10 底下的 Java 應用程式，卻呈現全白。而實際坐在該電腦前操作，可以正常執行和顯示畫面。此問題苦惱許久，最近終於解決了  
 本文連結: https://hackmd.io/@kmo/java_blank_issue  
 
 ::: info 
-- [Java Web Start 應用程式](https://en.wikipedia.org/wiki/Java_Web_Start) 為已經過時的技術，通常只有舊專案才有可能碰到  
-- 本文為紀錄遇到此問題，解決思路和解法
+- [Java Web Start](https://en.wikipedia.org/wiki/Java_Web_Start) 為已經過時的技術，通常只有舊專案才有可能碰到  
+- 本文為此問題解法的紀錄，但不一定開啟 .jnlp 應用程式都有一樣問題
 ::: 
 
 ## 問題簡述
@@ -17,18 +17,18 @@
 | 遠端桌面到 win10 | 開啟 `.jnlp` 呈現空白 |
 
 
-## 問題關鍵字搜尋
+## 關鍵字搜尋
 - 由於是使用 [Chrome Remote Desktop](https://remotedesktop.google.com) 發生的，習慣帶應用程式名稱，並添加異常情況去搜尋
 
 ```bash=
 Chrome Remote Desktop Java blank
 ```
-- 此時`Remote Desktop` 剛好是一個通用詞彙，幸運在 teamviewer 的社群看到類似問題討論，並且持續討論 3 年以上。之所以判斷 teamviewer 討論也適用，是因為此現象看起來都和 Java 應用程式有關，並且觀察其他搜尋結果，不同遠端程式都有類似 issue
+- 此時`Remote Desktop` 剛好是一個通用詞彙，幸運在 teamviewer 的社群看到類似問題討論，並且持續討論 3 年以上。之所以判斷 teamviewer 討論也適用，是因為此現象看起來都和 Java 應用程式有關，並且觀察其他搜尋結果，透過遠端桌面都有類似 issue
 - [Some applications does not show content (white window) Windows 10 host](https://community.teamviewer.com/English/discussion/10718/some-applications-does-not-show-content-white-window-windows-10-host)  
 ![](https://i.postimg.cc/tJb6fwNw/image.png =70%x)
 
 ## 測試解法
-- 該文底下網友 `@mattmill30`，測試各種解法，比如測試 Java 環境變數都失敗，最後是針對 win10 的 DXDiag 硬體加速設定關閉，即可修正  
+- 該文底下網友 `@mattmill30`，測試各種解法，比如測試 Java 環境變數都失敗，最後是把 win10 的顯示相關的硬體加速功能關閉，即可修正  
 ![](https://i.postimg.cc/nhr309z7/image.png =70%x)
 
 ::: spoiler 網友 `@mattmill30` 回覆完整內容
@@ -117,5 +117,8 @@ Reg Add HKLM\SOFTWARE\Microsoft\Direct3D\Drivers /V SoftwareOnly /T REG_DWORD /D
 - 測試筆電為工作用途，並無顯卡及遊戲需求，停用後並無明顯效能差異，但不確定其他情境停用是否有效能差異
 - 若修改完有任何異常情況，只需要回到腳本，設定 `Set _Mode=0` 再執行一次即可恢復
 :::
+
+## 結論
+- 透過遠端桌面(ex: [VNC](https://en.wikipedia.org/wiki/VNC), [TeamViewer](https://en.wikipedia.org/wiki/TeamViewer), [Chrome Remote Desktop](https://en.wikipedia.org/wiki/Chrome_Remote_Desktop) 等)，執行遠端 Windows 下應用程式呈現空白，可能和顯示相關的硬體加速功能有關
 ---
 {%hackmd @kmo/widget_license %}
