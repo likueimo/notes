@@ -1,21 +1,22 @@
 # 遠端桌面下，開啟 Java 應用程式(.jnlp)呈現空白
 
-> 最近接手舊的專案，用到`Java Web Start 應用程式(.jnlp)`。而當在外地出差，連線到遠端電腦，當執行遠端 win10 底下的 Java 應用程式，卻呈現全白。而實際坐在該電腦前操作，可以正常執行和顯示畫面。此問題苦惱許久，最近終於解決了  
+> 最近接手舊的專案，用到`Java Web Start 應用程式(.jnlp)`。而當在外地出差，連線到遠端電腦，執行遠端 win10 底下的 Java 應用程式(.jnlp)，卻呈現全白。而實際坐在該電腦前操作，可以正常執行和顯示畫面。此問題苦惱許久，最近終於解決了  
 本文連結: https://hackmd.io/@kmo/java_blank_issue  
 
 ::: info 
-- [Java Web Start](https://en.wikipedia.org/wiki/Java_Web_Start) 為已經過時的技術，通常只有舊專案才有可能碰到  
-- 本文為此問題解法的紀錄，但不一定開啟 .jnlp 應用程式都有一樣問題
+- [Java Web Start](https://en.wikipedia.org/wiki/Java_Web_Start) 是已經過時的技術，通常舊專案才有可能碰到  
+- 本文為紀錄遇到問題和解法，但不一定開啟 .jnlp 應用程式都有一樣問題
 ::: 
 
 ## 問題簡述
-
 
 | 情境             | 狀態                   |
 | ---------------- | ---------------------- |
 | win10 電腦前     | 開啟 `.jnlp` 正常顯示 |
 | 遠端桌面到 win10 | 開啟 `.jnlp` 呈現空白 |
 
+- 問題很類似[stackoverflow 網友](https://stackoverflow.com/q/45412979)遇到的(但實際是不一樣的問題)，借用他截圖比較好理解問題
+![](https://i.postimg.cc/KcNhNMNB/image.png =70%x)
 
 ## 關鍵字搜尋
 - 由於是使用 [Chrome Remote Desktop](https://remotedesktop.google.com) 發生的，習慣帶應用程式名稱，並添加異常情況去搜尋
