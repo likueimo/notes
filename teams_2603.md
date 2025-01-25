@@ -16,10 +16,10 @@ tags: [notes, teams, MS, Microsoft]
 ## 解決方法
 當遇到此錯誤時，且確定網路沒有問題，可以試著以下步驟
 - 使用瀏覽器，開啟 [Microsoft Teams 網頁版](https://teams.microsoft.com) 並登入，確認可以正常使用 Teams 網頁版
-- 回到 Microsoft Teams 桌面應用程式，重新登入，通常 2603 錯誤就不會發生
+- 回到 Microsoft Teams 桌面應用程式，重新登入，通常錯誤就不會發生
 
 ## 錯誤說明
-- 推測錯誤和憑證(oauth)有關，猜測網頁正常登入 Teams 後，能把相關資訊更新，解決異常
+- 推測錯誤和授權(OAuth)有關，網頁正常登入 Teams 後，能把相關 OAuth 更新，解決異常
 - 除了 Teams 之外，有些 Microsoft 產品也會發生 2603 錯誤，或許也能透過類似方式解決異常
 
 ## 後記
@@ -39,10 +39,10 @@ tags: [notes, teams, MS, Microsoft]
 ## 解決方法
 當遇到此錯誤時，且確定網路沒有問題，可以試著以下步驟
 - 使用瀏覽器，開啟 [Microsoft Teams 網頁版](https://teams.microsoft.com) 並登入，確認可以正常使用 Teams 網頁版
-- 回到 Microsoft Teams 桌面應用程式，重新登入，通常 2603 錯誤就不會發生
+- 回到 Microsoft Teams 桌面應用程式，重新登入，通常錯誤就不會發生
 
 ## 錯誤說明
-- 推測錯誤和憑證(oauth)有關，猜測網頁正常登入 Teams 後，能把相關資訊更新，解決異常
+- 推測錯誤和授權(OAuth)有關，網頁正常登入 Teams 後，能把相關 OAuth 更新，解決異常
 - 除了 Teams 之外，有些 Microsoft 產品也會發生 2603 錯誤，或許也能透過類似方式解決異常
 
 ## 後記
