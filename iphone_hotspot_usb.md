@@ -27,11 +27,11 @@
   - 進去資料夾 `AppleMobileDeviceSupport64` -> 尋找檔案 `netaapl64.inf` -> 點右鍵按安裝
 ### iPhone「個人熱點」
   - 開啟「允許其他人加入」
-  - 手機透過 USB 傳輸線連結電腦，理論上會自動分享網路給電腦
+  - 手機透過 USB 傳輸線連結電腦，當手機出現「信任這部電腦?」詢問，按「信任」之後，應會自動分享網路給電腦。分享網路成功，手機上方也會出現相關圖示。
 
 ## Powershell 步驟
 - 用 Windows 內建 Powershell 指令，也可以完成任務
-  - 應使用管理員權限開啟 Powershell，才能完成安裝 inf 檔動作
+  - 應使用管理員權限開啟 Powershell，才能執行安裝 inf 檔動作
 ### 安裝 AppleMobileDeviceSupport64.msi
 ```powershell=
 # 命名暫存資料夾
@@ -51,12 +51,15 @@ msiexec /i AppleMobileDeviceSupport64.msi /qb
 ```
 ### 安裝 usbaapl64.inf 和 netaapl64.inf
 ```powershell=
+# 一樣進到暫存資料夾，如延續上步驟不一定需要執行
+# cd $temp_itune_dir
+
 # 解壓縮 AppleMobileDeviceSupport64.msi
 msiexec /a AppleMobileDeviceSupport64.msi /qb TARGETDIR="$temp_itune_dir\AppleMobileDeviceSupport64"
 # 取得 usbaapl64.inf 絕對路徑
-$usbaapl64_path = (Get-ChildItem -Path "$temp_itune_dir" -Filter usbaapl64.inf -Recurse).FullName
+$usbaapl64_path = (Get-ChildItem -Path . -Filter usbaapl64.inf -Recurse).FullName
 # 取得 netaapl64.inf 絕對路徑
-$netaapl64_path = (Get-ChildItem -Path "$temp_itune_dir" -Filter netaapl64.inf -Recurse).FullName
+$netaapl64_path = (Get-ChildItem -Path . -Filter netaapl64.inf -Recurse).FullName
 
 # 安裝 usbaapl64.inf 
 pnputil /add-driver "$usbaapl64_path" /install
@@ -87,7 +90,8 @@ PS C:\Users\username\AppData\Local\Temp\temp_itunes> pnputil /enum-drivers | Sel
   驅動程式版本:     07/15/2013 1.8.5.1
   簽署人名稱:        Microsoft Windows Hardware Compatibility Publisher
 ```
-- 補充說明: 依照指令輸出的 oem 編號，若需要移除 usbaapl64.inf 和 netaapl64.inf，可透過下述指令
+- 補充說明: 若需要移除 usbaapl64.inf 和 netaapl64.inf，可透過下述指令  
+  - oem 編號會有差異，依照指令輸出的 oem 編號，以上述輸出為例 
 ```powershell=
 pnputil /delete-driver oem54.inf /uninstall
 pnputil /delete-driver oem67.inf /uninstall
@@ -96,7 +100,7 @@ pnputil /delete-driver oem67.inf /uninstall
 ## 後記
 - 特別感謝工作認識的夥伴李宇正，在我急需要用 iPhone 分享網路時候，指導我安裝 iTunes，完成用 USB 傳輸線分享網路給電腦
 - 完整安裝 iTunes 大部分情況能成功，卻有幾次失敗。當下趕時間急需要網路，只剩下 iPhone 能分享網路，卻苦惱找不到解決方法，因此事後花時間深入了解，並催生這篇文章出來，避免之後也有人需要使用。在撰寫本文章過程，也意外練習了 Powershell 指令，感覺有玩出興趣 (感謝 iPhone XD)
-- Microsoft Update Catalog (底下URL)，其實也有提供 driver。似乎電腦有網路情況下，插上 iPhone 設備， Windows 會試著從 update 系統安裝 USB driver (appleusb.inf, 可透過 pnputil 查詢)，那此時只需安裝 Net driver (netaapl64.inf) 即可。netaapl64.inf 也可從 Microsoft Update Catalog 安裝，名稱叫 `Apple - Net - 7/15/2013 12:00:00 AM - 1.8.5.1 `
+- Microsoft Update Catalog (底下URL)，其實也有提供 driver。電腦在有網路情況下，插上 iPhone 設備， Windows 似乎會試著從 update 系統安裝 USB driver (appleusb.inf，可透過 pnputil 查詢)，此時只需再安裝 Net driver (netaapl64.inf) 即可。netaapl64.inf 也可從 Microsoft Update Catalog 安裝，名稱叫 `Apple - Net - 7/15/2013 12:00:00 AM - 1.8.5.1 `
   - https://www.catalog.update.microsoft.com/Search.aspx?q=Apple
 
 
@@ -107,13 +111,13 @@ pnputil /delete-driver oem67.inf /uninstall
 | 檔案說明   | 檔案名稱 | 檔案來源 |
 | ---------- | ---- | ---- |
 | `Apple Mobile Device Support Installer` | `AppleMobileDeviceSupport64.msi` | `iTunes64Setup.exe` |
-| `Apple Mobile Device Ethernet driver`  | `netaapl64.inf` | `AppleMobileDeviceSupport64.msi` or `Microsoft Update Catalog`|
+| `Apple Mobile Device Ethernet driver`  | `netaapl64.inf` | `AppleMobileDeviceSupport64.msi` or Microsoft Update Catalog|
 
 - 底下 USB driver 安裝其中之一即可，兩者同時存在也不影響
 
 | 檔案說明  | 檔案名稱 | 檔案來源 |
 | ---------- | ---- | ---- |
-| `Apple Mobile Device driver` | `AppleUsb.inf` | `Microsoft Update Catalog`    |
+| `Apple Mobile Device driver` | `AppleUsb.inf` | Microsoft Update Catalog   |
 | `Apple USB driver`  | `usbaapl64.inf` | `AppleMobileDeviceSupport64.msi` |
 
 
