@@ -15,12 +15,12 @@
 ### 安裝 AppleMobileDeviceSupport64.msi
 - 下載 iTunes : https://www.apple.com/itunes/download/win64
 - 透過 7-zip 解壓縮 iTunes 檔案: 
-  - 對 `iTunes64Setup.exe` 點右鍵->7-zip-> 解壓縮至 `"iTunes64Setup\"`
+  - 對 `iTunes64Setup.exe` 點右鍵->7-zip-> `解壓縮至 "iTunes64Setup\"`
 - 僅需安裝 `AppleMobileDeviceSupport64.msi`: 
   - 進去資料夾 `iTunes64Setup` -> 對 `AppleMobileDeviceSupport64.msi` 點左鍵兩下進行安裝 
 ### 安裝 usbaapl64.inf 和 netaapl64.inf
 - 透過 7-zip 解壓縮 `AppleMobileDeviceSupport64.msi`
-  - 對 `AppleMobileDeviceSupport64.msi` 點右鍵->7-zip-> 解壓縮至 `"AppleMobileDeviceSupport64\"`
+  - 對 `AppleMobileDeviceSupport64.msi` 點右鍵->7-zip-> `解壓縮至 "AppleMobileDeviceSupport64\"`
 - 安裝 `usbaapl64.inf`
   - 進去資料夾 `AppleMobileDeviceSupport64` -> 尋找檔案 `usbaapl64.inf` -> 點右鍵按安裝
 - 安裝 `netaapl64.inf`
@@ -28,7 +28,8 @@
 ### iPhone「個人熱點」
   - 開啟「允許其他人加入」
   - 手機透過 USB 傳輸線連結電腦，當手機出現「信任這部電腦?」詢問，按「信任」之後，應會自動分享網路給電腦。分享網路成功，手機上方也會出現相關圖示。
-
+   ![](https://i.imgur.com/0Y5uVQE.png =220x)
+   ![](https://i.imgur.com/DMnatcy.png =300x)
 ## Powershell 步驟
 - 用 Windows 內建 Powershell 指令，也可以完成任務
   - 應使用管理員權限開啟 Powershell，才能執行安裝 inf 檔動作
@@ -101,7 +102,8 @@ pnputil /delete-driver oem67.inf /uninstall
 - 特別感謝工作認識的夥伴李宇正，在我急需要用 iPhone 分享網路時候，指導我安裝 iTunes，完成用 USB 傳輸線分享網路給電腦
 - 完整安裝 iTunes 大部分情況能成功，卻有幾次失敗。當下趕時間急需要網路，只剩下 iPhone 能分享網路，卻苦惱找不到解決方法，因此事後花時間深入了解，並催生這篇文章出來，避免之後也有人需要使用。在撰寫本文章過程，也意外練習了 Powershell 指令，感覺有玩出興趣 (感謝 iPhone XD)
 - Microsoft Update Catalog (底下URL)，其實也有提供 driver。電腦在有網路情況下，插上 iPhone 設備， Windows 似乎會試著從 update 系統安裝 USB driver (appleusb.inf，可透過 pnputil 查詢)，此時只需再安裝 Net driver (netaapl64.inf) 即可。netaapl64.inf 也可從 Microsoft Update Catalog 安裝，名稱叫 `Apple - Net - 7/15/2013 12:00:00 AM - 1.8.5.1 `
-  - https://www.catalog.update.microsoft.com/Search.aspx?q=Apple
+  - https://www.catalog.update.microsoft.com/Search.aspx?q=Apple  
+    (此 URL 搜尋結果有好幾頁，可能要翻頁，才能找到想要的檔案)  
 
 
 
